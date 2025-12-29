@@ -1,0 +1,18 @@
+{
+  "year": 2023,
+  "source": "Steam Game Awards",
+  "awards": [
+    {
+      "award_id": "steam_awards",
+      "award_name": "Steam Awards",
+      "winner": {
+        "game_id": "1302240",
+        "game_name": "Labyrinthine",
+        "icon_url": "img/steam/1302240.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1302240/Labyrinthine?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "year": 2020,
+  "source": "Steam Game Awards",
+  "awards": [
+    {
+      "award_id": "steam_awards",
+      "award_name": "Steam Awards",
+      "winner": {
+        "game_id": "1174180",
+        "game_name": "Red Dead Redemption 2",
+        "icon_url": "img/steam/1174180.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    }
+  ]
+}

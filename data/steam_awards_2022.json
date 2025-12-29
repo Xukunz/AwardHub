@@ -1,0 +1,18 @@
+{
+  "year": 2022,
+  "source": "Steam Game Awards",
+  "awards": [
+    {
+      "award_id": "steam_awards",
+      "award_name": "Steam Awards",
+      "winner": {
+        "game_id": "1332010",
+        "game_name": "Stray",
+        "icon_url": "img/steam/1332010.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1332010/Stray/?snr=1_steamawards___winner-capsule"
+      },
+      "nominees": []
+    }
+  ]
+}

@@ -3,22 +3,16 @@
   "source": "Steam Game Awards",
   "awards": [
     {
-      "award_id": "game_of_the_year",
-      "award_name": "Game of the Year",
+      "award_id": "steam_awards",
+      "award_name": "Steam Awards",
       "winner": {
-        "game_id": "example_game_1",
-        "game_name": "Example Game 1",
-        "icon_url": "img/placeholder.png",
-        "blogger_url": "https://yourblog.blogspot.com/2024/12/example-game-1.html"
+        "game_id": "2669410",
+        "game_name": "Metro Awakening",
+        "icon_url": "img/steam/2669410.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2669410/Metro_Awakening?snr=1_steamawards_steamawards__winnercapsule"
       },
-      "nominees": [
-        {
-          "game_id": "example_game_2",
-          "game_name": "Example Game 2",
-          "icon_url": "img/placeholder.png",
-          "blogger_url": "https://yourblog.blogspot.com/2024/12/example-game-2.html"
-        }
-      ]
+      "nominees": []
     }
   ]
 }

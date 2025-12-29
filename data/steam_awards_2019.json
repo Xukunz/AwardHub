@@ -1,0 +1,18 @@
+{
+  "year": 2019,
+  "source": "Steam Game Awards",
+  "awards": [
+    {
+      "award_id": "steam_awards",
+      "award_name": "Steam Awards",
+      "winner": {
+        "game_id": "814380",
+        "game_name": "Sekiro™: Shadows Die Twice - GOTY Edition",
+        "icon_url": "img/steam/814380.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/814380/Sekiro_Shadows_Die_Twice__GOTY_Edition/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    }
+  ]
+}
