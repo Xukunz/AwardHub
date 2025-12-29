@@ -1,10 +1,130 @@
 {
   "year": 2024,
-  "source": "Steam Game Awards",
+  "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "steam_awards",
-      "award_name": "Steam Awards",
+      "award_id": "best_game_on_steam_deck_award",
+      "award_name": "Best Game on Steam Deck Award",
+      "winner": {
+        "game_id": "2322010",
+        "game_name": "God of War Ragnarok",
+        "icon_url": "img/steam/2322010.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2322010/God_of_War_Ragnarok?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "best_game_you_suck_at_award",
+      "award_name": "Best Game You Suck At Award",
+      "winner": {
+        "game_id": "2358720",
+        "game_name": "Black Myth Wukong",
+        "icon_url": "img/steam/2358720.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2358720/Black_Myth_Wukong?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "best_soundtrack_award",
+      "award_name": "Best Soundtrack Award",
+      "winner": {
+        "game_id": "2668510",
+        "game_name": "Red Dead Redemption",
+        "icon_url": "img/steam/2668510.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2668510/Red_Dead_Redemption?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "better_with_friends_award",
+      "award_name": "Better With Friends Award",
+      "winner": {
+        "game_id": "553850",
+        "game_name": "HELLDIVERS 2",
+        "icon_url": "img/steam/553850.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/553850/HELLDIVERS_2?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "game_of_the_year_award",
+      "award_name": "Game of the Year Award",
+      "winner": {
+        "game_id": "2358720",
+        "game_name": "Black Myth Wukong",
+        "icon_url": "img/steam/2358720.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2358720/Black_Myth_Wukong?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "labor_of_love_award",
+      "award_name": "Labor of Love Award",
+      "winner": {
+        "game_id": "1245620",
+        "game_name": "ELDEN RING",
+        "icon_url": "img/steam/1245620.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1245620/ELDEN_RING?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "most_innovative_gameplay_award",
+      "award_name": "Most Innovative Gameplay Award",
+      "winner": {
+        "game_id": "3097560",
+        "game_name": "Liars Bar",
+        "icon_url": "img/steam/3097560.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/3097560/Liars_Bar?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_story_rich_game_award",
+      "award_name": "Outstanding Story-Rich Game Award",
+      "winner": {
+        "game_id": "2358720",
+        "game_name": "Black Myth Wukong",
+        "icon_url": "img/steam/2358720.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2358720/Black_Myth_Wukong?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_visual_style_award",
+      "award_name": "Outstanding Visual Style Award",
+      "winner": {
+        "game_id": "2124490",
+        "game_name": "SILENT HILL 2",
+        "icon_url": "img/steam/2124490.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2124490/SILENT_HILL_2?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "sit_back_and_relax_award",
+      "award_name": "Sit Back and Relax Award",
+      "winner": {
+        "game_id": "2300320",
+        "game_name": "Farming Simulator 25",
+        "icon_url": "img/steam/2300320.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/2300320/Farming_Simulator_25?snr=1_steamawards_steamawards__winnercapsule"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "vr_game_of_the_year_award",
+      "award_name": "VR Game of the Year Award",
       "winner": {
         "game_id": "2669410",
         "game_name": "Metro Awakening",

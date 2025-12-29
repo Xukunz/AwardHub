@@ -1,10 +1,118 @@
 {
   "year": 2021,
-  "source": "Steam Game Awards",
+  "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "steam_awards",
-      "award_name": "Steam Awards",
+      "award_id": "cooking_simulator_vr",
+      "award_name": "Cooking Simulator VR",
+      "winner": {
+        "game_id": "1358140",
+        "game_name": "Cooking Simulator VR",
+        "icon_url": "img/steam/1358140.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1358140/Cooking_Simulator_VR/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "cyberpunk_2077",
+      "award_name": "Cyberpunk 2077",
+      "winner": {
+        "game_id": "1091500",
+        "game_name": "Cyberpunk 2077",
+        "icon_url": "img/steam/1091500.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1091500/Cyberpunk_2077/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "deathloop",
+      "award_name": "DEATHLOOP",
+      "winner": {
+        "game_id": "1252330",
+        "game_name": "DEATHLOOP",
+        "icon_url": "img/steam/1252330.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1252330/DEATHLOOP/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "farming_simulator_22",
+      "award_name": "Farming Simulator 22",
+      "winner": {
+        "game_id": "1248130",
+        "game_name": "Farming Simulator 22",
+        "icon_url": "img/steam/1248130.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1248130/Farming_Simulator_22/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "forza_horizon_5",
+      "award_name": "Forza Horizon 5",
+      "winner": {
+        "game_id": "1551360",
+        "game_name": "Forza Horizon 5",
+        "icon_url": "img/steam/1551360.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1551360/Forza_Horizon_5/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "it_takes_two",
+      "award_name": "It Takes Two",
+      "winner": {
+        "game_id": "1426210",
+        "game_name": "It Takes Two",
+        "icon_url": "img/steam/1426210.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1426210/It_Takes_Two/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "marvels_guardians_of_the_galaxy",
+      "award_name": "Marvel's Guardians of the Galaxy",
+      "winner": {
+        "game_id": "1088850",
+        "game_name": "Marvel's Guardians of the Galaxy",
+        "icon_url": "img/steam/1088850.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1088850/Marvels_Guardians_of_the_Galaxy/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "nioh_2_the_complete_edition",
+      "award_name": "Nioh 2 – The Complete Edition",
+      "winner": {
+        "game_id": "1325200",
+        "game_name": "Nioh 2 – The Complete Edition",
+        "icon_url": "img/steam/1325200.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1325200/Nioh_2__The_Complete_Edition/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "resident_evil_village",
+      "award_name": "Resident Evil Village",
+      "winner": {
+        "game_id": "1196590",
+        "game_name": "Resident Evil Village",
+        "icon_url": "img/steam/1196590.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/1196590/Resident_Evil_Village/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "terraria",
+      "award_name": "Terraria",
       "winner": {
         "game_id": "105600",
         "game_name": "Terraria",

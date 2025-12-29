@@ -1,10 +1,82 @@
 {
   "year": 2018,
-  "source": "Steam Game Awards",
+  "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "steam_awards",
-      "award_name": "Steam Awards",
+      "award_id": "assassins_creed_odyssey",
+      "award_name": "Assassin's Creed® Odyssey",
+      "winner": {
+        "game_id": "812140",
+        "game_name": "Assassin's Creed® Odyssey",
+        "icon_url": "img/steam/812140.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/812140/Assassins_Creed_Odyssey/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "best_environment",
+      "award_name": "Best Environment",
+      "winner": {
+        "game_id": "292030",
+        "game_name": "The Witcher 3: Wild Hunt",
+        "icon_url": "img/steam/292030.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "grand_theft_auto_v_legacy",
+      "award_name": "Grand Theft Auto V Legacy",
+      "winner": {
+        "game_id": "271590",
+        "game_name": "Grand Theft Auto V Legacy",
+        "icon_url": "img/steam/271590.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V_Legacy/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "pubg_battlegrounds",
+      "award_name": "PUBG: BATTLEGROUNDS",
+      "winner": {
+        "game_id": "578080",
+        "game_name": "PUBG: BATTLEGROUNDS",
+        "icon_url": "img/steam/578080.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/578080/PUBG_BATTLEGROUNDS/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "rocket_league",
+      "award_name": "Rocket League®",
+      "winner": {
+        "game_id": "252950",
+        "game_name": "Rocket League®",
+        "icon_url": "img/steam/252950.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/252950/Rocket_League/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "tom_clancys_rainbow_six_siege_x",
+      "award_name": "Tom Clancy's Rainbow Six® Siege X",
+      "winner": {
+        "game_id": "359550",
+        "game_name": "Tom Clancy's Rainbow Six® Siege X",
+        "icon_url": "img/steam/359550.jpg",
+        "blogger_url": "",
+        "steam_url": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege_X/?snr=1_steamawards___winner"
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "vr_game_of_the_year",
+      "award_name": "VR Game of the Year",
       "winner": {
         "game_id": "611670",
         "game_name": "The Elder Scrolls V: Skyrim VR",
