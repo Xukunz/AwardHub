@@ -8,7 +8,7 @@
       "winner": {
         "game_id": "1222670",
         "game_name": "The Sims™ 4",
-        "icon_url": "img/steam/1222670.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1222670/The_Sims_4/?snr=1_steamawards___winner"
       },
@@ -20,7 +20,7 @@
       "winner": {
         "game_id": "1172470",
         "game_name": "Apex Legends™",
-        "icon_url": "img/steam/1172470.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1172470/Apex_Legends/?snr=1_steamawards___winner"
       },
@@ -32,7 +32,7 @@
       "winner": {
         "game_id": "730",
         "game_name": "Counter-Strike 2",
-        "icon_url": "img/steam/730.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/730/CounterStrike_2/?snr=1_steamawards___winner"
       },
@@ -44,7 +44,7 @@
       "winner": {
         "game_id": "1850570",
         "game_name": "DEATH STRANDING DIRECTOR'S CUT",
-        "icon_url": "img/steam/1850570.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/?snr=1_steamawards___winner"
       },
@@ -56,7 +56,7 @@
       "winner": {
         "game_id": "782330",
         "game_name": "DOOM Eternal",
-        "icon_url": "img/steam/782330.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/782330/DOOM_Eternal/?snr=1_steamawards___winner"
       },
@@ -68,7 +68,7 @@
       "winner": {
         "game_id": "1097150",
         "game_name": "Fall Guys",
-        "icon_url": "img/steam/1097150.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1097150/Fall_Guys/?snr=1_steamawards___winner"
       },
@@ -80,7 +80,7 @@
       "winner": {
         "game_id": "546560",
         "game_name": "Half-Life: Alyx",
-        "icon_url": "img/steam/546560.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/546560/HalfLife_Alyx/?snr=1_steamawards___winner"
       },
@@ -92,7 +92,7 @@
       "winner": {
         "game_id": "1057090",
         "game_name": "Ori and the Will of the Wisps",
-        "icon_url": "img/steam/1057090.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1057090/Ori_and_the_Will_of_the_Wisps/?snr=1_steamawards___winner"
       },
@@ -104,7 +104,7 @@
       "winner": {
         "game_id": "1174180",
         "game_name": "Red Dead Redemption 2",
-        "icon_url": "img/steam/1174180.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/?snr=1_steamawards___winner"
       },

@@ -8,7 +8,7 @@
       "winner": {
         "game_id": "812140",
         "game_name": "Assassin's Creed® Odyssey",
-        "icon_url": "img/steam/812140.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/812140/Assassins_Creed_Odyssey/?snr=1_steamawards___winner"
       },
@@ -20,7 +20,7 @@
       "winner": {
         "game_id": "292030",
         "game_name": "The Witcher 3: Wild Hunt",
-        "icon_url": "img/steam/292030.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/?snr=1_steamawards___winner"
       },
@@ -32,7 +32,7 @@
       "winner": {
         "game_id": "271590",
         "game_name": "Grand Theft Auto V Legacy",
-        "icon_url": "img/steam/271590.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V_Legacy/?snr=1_steamawards___winner"
       },
@@ -44,7 +44,7 @@
       "winner": {
         "game_id": "578080",
         "game_name": "PUBG: BATTLEGROUNDS",
-        "icon_url": "img/steam/578080.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/578080/PUBG_BATTLEGROUNDS/?snr=1_steamawards___winner"
       },
@@ -56,7 +56,7 @@
       "winner": {
         "game_id": "252950",
         "game_name": "Rocket League®",
-        "icon_url": "img/steam/252950.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/252950/Rocket_League/?snr=1_steamawards___winner"
       },
@@ -68,7 +68,7 @@
       "winner": {
         "game_id": "359550",
         "game_name": "Tom Clancy's Rainbow Six® Siege X",
-        "icon_url": "img/steam/359550.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege_X/?snr=1_steamawards___winner"
       },
@@ -80,7 +80,7 @@
       "winner": {
         "game_id": "611670",
         "game_name": "The Elder Scrolls V: Skyrim VR",
-        "icon_url": "img/steam/611670.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/611670/The_Elder_Scrolls_V_Skyrim_VR/?snr=1_steamawards___winner"
       },

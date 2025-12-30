@@ -8,7 +8,7 @@
       "winner": {
         "game_id": "752590",
         "game_name": "A Plague Tale: Innocence",
-        "icon_url": "img/steam/752590.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/752590/A_Plague_Tale_Innocence/?snr=1_steamawards___winner"
       },
@@ -20,7 +20,7 @@
       "winner": {
         "game_id": "620980",
         "game_name": "Beat Saber",
-        "icon_url": "img/steam/620980.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/620980/Beat_Saber/?snr=1_steamawards___winner"
       },
@@ -32,7 +32,7 @@
       "winner": {
         "game_id": "221100",
         "game_name": "DayZ",
-        "icon_url": "img/steam/221100.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/221100/DayZ/?snr=1_steamawards___winner"
       },
@@ -44,7 +44,7 @@
       "winner": {
         "game_id": "271590",
         "game_name": "Grand Theft Auto V Legacy",
-        "icon_url": "img/steam/271590.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V_Legacy/?snr=1_steamawards___winner"
       },
@@ -56,7 +56,7 @@
       "winner": {
         "game_id": "683320",
         "game_name": "GRIS",
-        "icon_url": "img/steam/683320.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/683320/GRIS/?snr=1_steamawards___winner"
       },
@@ -68,7 +68,7 @@
       "winner": {
         "game_id": "976310",
         "game_name": "Mortal Kombat 11",
-        "icon_url": "img/steam/976310.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/976310/Mortal_Kombat_11/?snr=1_steamawards___winner"
       },
@@ -80,7 +80,7 @@
       "winner": {
         "game_id": "557340",
         "game_name": "My Friend Pedro",
-        "icon_url": "img/steam/557340.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/557340/My_Friend_Pedro/?snr=1_steamawards___winner"
       },
@@ -92,7 +92,7 @@
       "winner": {
         "game_id": "814380",
         "game_name": "Sekiro™: Shadows Die Twice - GOTY Edition",
-        "icon_url": "img/steam/814380.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/814380/Sekiro_Shadows_Die_Twice__GOTY_Edition/?snr=1_steamawards___winner"
       },

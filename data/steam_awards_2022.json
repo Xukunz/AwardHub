@@ -8,7 +8,7 @@
       "winner": {
         "game_id": "1091500",
         "game_name": "Cyberpunk 2077",
-        "icon_url": "img/steam/1091500.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1091500/Cyberpunk_2077/?snr=1_steamawards___winner-capsule"
       },
@@ -20,7 +20,7 @@
       "winner": {
         "game_id": "1850570",
         "game_name": "DEATH STRANDING DIRECTOR'S CUT",
-        "icon_url": "img/steam/1850570.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/?snr=1_steamawards___winner-capsule"
       },
@@ -32,7 +32,7 @@
       "winner": {
         "game_id": "1245620",
         "game_name": "ELDEN RING",
-        "icon_url": "img/steam/1245620.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1245620/ELDEN_RING/?snr=1_steamawards___winner-capsule"
       },
@@ -44,7 +44,7 @@
       "winner": {
         "game_id": "1462040",
         "game_name": "FINAL FANTASY VII REMAKE INTERGRADE",
-        "icon_url": "img/steam/1462040.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1462040/FINAL_FANTASY_VII_REMAKE_INTERGRADE/?snr=1_steamawards___winner-capsule"
       },
@@ -56,7 +56,7 @@
       "winner": {
         "game_id": "1593500",
         "game_name": "God of War",
-        "icon_url": "img/steam/1593500.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1593500/God_of_War/?snr=1_steamawards___winner-capsule"
       },
@@ -68,7 +68,7 @@
       "winner": {
         "game_id": "1659040",
         "game_name": "HITMAN World of Assassination",
-        "icon_url": "img/steam/1659040.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1659040/HITMAN_World_of_Assassination/?snr=1_steamawards___winner-capsule"
       },
@@ -80,7 +80,7 @@
       "winner": {
         "game_id": "920210",
         "game_name": "LEGO® Star Wars™: The Skywalker Saga",
-        "icon_url": "img/steam/920210.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/920210/LEGO_Star_Wars_The_Skywalker_Saga/?snr=1_steamawards___winner-capsule"
       },
@@ -92,7 +92,7 @@
       "winner": {
         "game_id": "1817190",
         "game_name": "Marvel’s Spider-Man: Miles Morales",
-        "icon_url": "img/steam/1817190.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1817190/Marvels_SpiderMan_Miles_Morales/?snr=1_steamawards___winner-capsule"
       },
@@ -104,7 +104,7 @@
       "winner": {
         "game_id": "648800",
         "game_name": "Raft",
-        "icon_url": "img/steam/648800.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/648800/Raft/?snr=1_steamawards___winner-capsule"
       },
@@ -116,7 +116,7 @@
       "winner": {
         "game_id": "1332010",
         "game_name": "Stray",
-        "icon_url": "img/steam/1332010.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1332010/Stray/?snr=1_steamawards___winner-capsule"
       },

@@ -8,7 +8,7 @@
       "winner": {
         "game_id": "990080",
         "game_name": "Hogwarts Legacy",
-        "icon_url": "img/steam/990080.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/990080/Hogwarts_Legacy?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -20,7 +20,7 @@
       "winner": {
         "game_id": "2138710",
         "game_name": "Sifu",
-        "icon_url": "img/steam/2138710.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/2138710/Sifu?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -32,7 +32,7 @@
       "winner": {
         "game_id": "1888930",
         "game_name": "The Last of Us Part I",
-        "icon_url": "img/steam/1888930.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -44,7 +44,7 @@
       "winner": {
         "game_id": "1966720",
         "game_name": "Lethal Company",
-        "icon_url": "img/steam/1966720.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1966720/Lethal_Company?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -56,7 +56,7 @@
       "winner": {
         "game_id": "1086940",
         "game_name": "Baldurs Gate 3",
-        "icon_url": "img/steam/1086940.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1086940/Baldurs_Gate_3?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -68,7 +68,7 @@
       "winner": {
         "game_id": "1174180",
         "game_name": "Red Dead Redemption 2",
-        "icon_url": "img/steam/1174180.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -80,7 +80,7 @@
       "winner": {
         "game_id": "1716740",
         "game_name": "Starfield",
-        "icon_url": "img/steam/1716740.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1716740/Starfield?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -92,7 +92,7 @@
       "winner": {
         "game_id": "1086940",
         "game_name": "Baldurs Gate 3",
-        "icon_url": "img/steam/1086940.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1086940/Baldurs_Gate_3?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -104,7 +104,7 @@
       "winner": {
         "game_id": "668580",
         "game_name": "Atomic Heart",
-        "icon_url": "img/steam/668580.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/668580/Atomic_Heart?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -116,7 +116,7 @@
       "winner": {
         "game_id": "1868140",
         "game_name": "DAVE THE DIVER",
-        "icon_url": "img/steam/1868140.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1868140/DAVE_THE_DIVER?snr=1_steamawards_steamawards__winnercapsule"
       },
@@ -128,7 +128,7 @@
       "winner": {
         "game_id": "1302240",
         "game_name": "Labyrinthine",
-        "icon_url": "img/steam/1302240.jpg",
+        "icon_url": "img/*",
         "blogger_url": "",
         "steam_url": "https://store.steampowered.com/app/1302240/Labyrinthine?snr=1_steamawards_steamawards__winnercapsule"
       },
