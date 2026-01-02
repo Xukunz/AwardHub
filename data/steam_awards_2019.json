@@ -3,98 +3,98 @@
   "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "a_plague_tale_innocence",
-      "award_name": "A Plague Tale: Innocence",
+      "award_id": "best_game_you_suck_at",
+      "award_name": "Best Game You Suck At",
       "winner": {
-        "game_id": "752590",
-        "game_name": "A Plague Tale: Innocence",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/752590/A_Plague_Tale_Innocence/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "beat_saber",
-      "award_name": "Beat Saber",
-      "winner": {
-        "game_id": "620980",
-        "game_name": "Beat Saber",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/620980/Beat_Saber/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "dayz",
-      "award_name": "DayZ",
-      "winner": {
-        "game_id": "221100",
-        "game_name": "DayZ",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/221100/DayZ/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "grand_theft_auto_v_legacy",
-      "award_name": "Grand Theft Auto V Legacy",
-      "winner": {
-        "game_id": "271590",
-        "game_name": "Grand Theft Auto V Legacy",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V_Legacy/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "gris",
-      "award_name": "GRIS",
-      "winner": {
-        "game_id": "683320",
-        "game_name": "GRIS",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/683320/GRIS/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "mortal_kombat_11",
-      "award_name": "Mortal Kombat 11",
-      "winner": {
-        "game_id": "976310",
+        "game_id": "mortal_kombat_11",
         "game_name": "Mortal Kombat 11",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2019/best_game_you_suck_at.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/976310/Mortal_Kombat_11/?snr=1_steamawards___winner"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "my_friend_pedro",
-      "award_name": "My Friend Pedro",
+      "award_id": "better_with_friends",
+      "award_name": "Better With Friends",
       "winner": {
-        "game_id": "557340",
-        "game_name": "My Friend Pedro",
-        "icon_url": "img/*",
+        "game_id": "dayz",
+        "game_name": "DayZ",
+        "icon_url": "img/steam_awards/2019/better_with_friends.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/557340/My_Friend_Pedro/?snr=1_steamawards___winner"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "sekiro_shadows_die_twice_goty_edition",
-      "award_name": "Sekiro™: Shadows Die Twice - GOTY Edition",
+      "award_id": "game_of_the_year",
+      "award_name": "Game of the Year",
       "winner": {
-        "game_id": "814380",
+        "game_id": "sekiro_shadows_die_twice_goty_edition",
         "game_name": "Sekiro™: Shadows Die Twice - GOTY Edition",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2019/game_of_the_year.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/814380/Sekiro_Shadows_Die_Twice__GOTY_Edition/?snr=1_steamawards___winner"
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "labor_of_love",
+      "award_name": "Labor of Love",
+      "winner": {
+        "game_id": "grand_theft_auto_v_legacy",
+        "game_name": "Grand Theft Auto V Legacy",
+        "icon_url": "img/steam_awards/2019/labor_of_love.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "most_innovative_gameplay",
+      "award_name": "Most Innovative Gameplay",
+      "winner": {
+        "game_id": "my_friend_pedro",
+        "game_name": "My Friend Pedro",
+        "icon_url": "img/steam_awards/2019/most_innovative_gameplay.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_story_rich_game",
+      "award_name": "Outstanding Story-Rich Game",
+      "winner": {
+        "game_id": "a_plague_tale_innocence",
+        "game_name": "A Plague Tale: Innocence",
+        "icon_url": "img/steam_awards/2019/outstanding_story_rich_game.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_visual_style",
+      "award_name": "Outstanding Visual Style",
+      "winner": {
+        "game_id": "gris",
+        "game_name": "GRIS",
+        "icon_url": "img/steam_awards/2019/outstanding_visual_style.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "vr_game_of_the_year",
+      "award_name": "VR Game of the Year",
+      "winner": {
+        "game_id": "beat_saber",
+        "game_name": "Beat Saber",
+        "icon_url": "img/steam_awards/2019/vr_game_of_the_year.jpg",
+        "blogger_url": "",
+        "steam_url": ""
       },
       "nominees": []
     }
