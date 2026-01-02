@@ -3,134 +3,134 @@
   "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "best_game_on_steam_deck_award",
-      "award_name": "Best Game on Steam Deck Award",
+      "award_id": "bestgameonsteamdeck",
+      "award_name": "BestGameonSteamDeck",
       "winner": {
-        "game_id": "990080",
+        "game_id": "hogwarts_legacy",
         "game_name": "Hogwarts Legacy",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/bestgameonsteamdeck.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/990080/Hogwarts_Legacy?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "best_game_you_suck_at_award",
-      "award_name": "Best Game You Suck At Award",
+      "award_id": "bestgameyousuckat",
+      "award_name": "BestGameYouSuckAt",
       "winner": {
-        "game_id": "2138710",
+        "game_id": "sifu",
         "game_name": "Sifu",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/bestgameyousuckat.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/2138710/Sifu?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "best_soundtrack_award",
-      "award_name": "Best Soundtrack Award",
+      "award_id": "bestsoundtrack",
+      "award_name": "BestSoundtrack",
       "winner": {
-        "game_id": "1888930",
+        "game_id": "the_last_of_us_part_i",
         "game_name": "The Last of Us Part I",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/bestsoundtrack.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1888930/The_Last_of_Us_Part_I?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "better_with_friends_award",
-      "award_name": "Better With Friends Award",
+      "award_id": "betterwithfriends",
+      "award_name": "BetterWithFriends",
       "winner": {
-        "game_id": "1966720",
+        "game_id": "lethal_company",
         "game_name": "Lethal Company",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/betterwithfriends.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1966720/Lethal_Company?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "game_of_the_year_award",
-      "award_name": "Game of the Year Award",
+      "award_id": "gameoftheyear",
+      "award_name": "GameoftheYear",
       "winner": {
-        "game_id": "1086940",
+        "game_id": "baldurs_gate_3",
         "game_name": "Baldurs Gate 3",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/gameoftheyear.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1086940/Baldurs_Gate_3?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "labor_of_love_award",
-      "award_name": "Labor of Love Award",
+      "award_id": "laboroflove",
+      "award_name": "LaborofLove",
       "winner": {
-        "game_id": "1174180",
+        "game_id": "red_dead_redemption_2",
         "game_name": "Red Dead Redemption 2",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/laboroflove.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "most_innovative_gameplay_award",
-      "award_name": "Most Innovative Gameplay Award",
+      "award_id": "mostinnovativegameplay",
+      "award_name": "MostInnovativeGameplay",
       "winner": {
-        "game_id": "1716740",
+        "game_id": "starfield",
         "game_name": "Starfield",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/mostinnovativegameplay.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1716740/Starfield?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "outstanding_story_rich_game_award",
-      "award_name": "Outstanding Story-Rich Game Award",
+      "award_id": "outstandingstory_richgame",
+      "award_name": "OutstandingStory-RichGame",
       "winner": {
-        "game_id": "1086940",
+        "game_id": "baldurs_gate_3",
         "game_name": "Baldurs Gate 3",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/outstandingstory_richgame.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1086940/Baldurs_Gate_3?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "outstanding_visual_style_award",
-      "award_name": "Outstanding Visual Style Award",
+      "award_id": "outstandingvisualstyle",
+      "award_name": "OutstandingVisualStyle",
       "winner": {
-        "game_id": "668580",
+        "game_id": "atomic_heart",
         "game_name": "Atomic Heart",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/outstandingvisualstyle.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/668580/Atomic_Heart?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "sit_back_and_relax_award",
-      "award_name": "Sit Back and Relax Award",
+      "award_id": "sitbackandrelax",
+      "award_name": "SitBackandRelax",
       "winner": {
-        "game_id": "1868140",
+        "game_id": "dave_the_diver",
         "game_name": "DAVE THE DIVER",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/sitbackandrelax.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1868140/DAVE_THE_DIVER?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "vr_game_of_the_year_award",
-      "award_name": "VR Game of the Year Award",
+      "award_id": "vrgameoftheyear",
+      "award_name": "VRGameoftheYear",
       "winner": {
-        "game_id": "1302240",
+        "game_id": "labyrinthine",
         "game_name": "Labyrinthine",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2023/vrgameoftheyear.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1302240/Labyrinthine?snr=1_steamawards_steamawards__winnercapsule"
+        "steam_url": ""
       },
       "nominees": []
     }

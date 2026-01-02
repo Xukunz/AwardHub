@@ -3,110 +3,122 @@
   "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "2020_sit_back_and_relax_this_game_is_the_antidote_to_a_busy_day_its_smooth_its_relaxing_it_lets_your_worries_melt_away_this_game_is_your_moment_of_zen",
-      "award_name": "2020 Sit Back and Relax This game is the antidote to a busy day. It's smooth, it's relaxing, it lets your worries melt away. This game is your moment of zen.",
+      "award_id": "best_game_you_suck_at",
+      "award_name": "Best Game You Suck At",
       "winner": {
-        "game_id": "1222670",
-        "game_name": "The Sims™ 4",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1222670/The_Sims_4/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "apex_legends",
-      "award_name": "Apex Legends™",
-      "winner": {
-        "game_id": "1172470",
+        "game_id": "apex_legends",
         "game_name": "Apex Legends™",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2020/best_game_you_suck_at.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1172470/Apex_Legends/?snr=1_steamawards___winner"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "counter_strike_2",
-      "award_name": "Counter-Strike 2",
+      "award_id": "best_soundtrack",
+      "award_name": "Best Soundtrack",
       "winner": {
-        "game_id": "730",
-        "game_name": "Counter-Strike 2",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/730/CounterStrike_2/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "death_stranding_directors_cut",
-      "award_name": "DEATH STRANDING DIRECTOR'S CUT",
-      "winner": {
-        "game_id": "1850570",
-        "game_name": "DEATH STRANDING DIRECTOR'S CUT",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "doom_eternal",
-      "award_name": "DOOM Eternal",
-      "winner": {
-        "game_id": "782330",
+        "game_id": "doom_eternal",
         "game_name": "DOOM Eternal",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2020/best_soundtrack.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/782330/DOOM_Eternal/?snr=1_steamawards___winner"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "fall_guys",
-      "award_name": "Fall Guys",
+      "award_id": "better_with_friends",
+      "award_name": "Better With Friends",
       "winner": {
-        "game_id": "1097150",
+        "game_id": "fall_guys",
         "game_name": "Fall Guys",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2020/better_with_friends.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1097150/Fall_Guys/?snr=1_steamawards___winner"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "half_life_alyx",
-      "award_name": "Half-Life: Alyx",
+      "award_id": "game_of_the_year",
+      "award_name": "Game of the Year",
       "winner": {
-        "game_id": "546560",
-        "game_name": "Half-Life: Alyx",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/546560/HalfLife_Alyx/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "ori_and_the_will_of_the_wisps",
-      "award_name": "Ori and the Will of the Wisps",
-      "winner": {
-        "game_id": "1057090",
-        "game_name": "Ori and the Will of the Wisps",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1057090/Ori_and_the_Will_of_the_Wisps/?snr=1_steamawards___winner"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "red_dead_redemption_2",
-      "award_name": "Red Dead Redemption 2",
-      "winner": {
-        "game_id": "1174180",
+        "game_id": "red_dead_redemption_2",
         "game_name": "Red Dead Redemption 2",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2020/game_of_the_year.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/?snr=1_steamawards___winner"
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "labor_of_love",
+      "award_name": "Labor of Love",
+      "winner": {
+        "game_id": "counter_strike_2",
+        "game_name": "Counter-Strike 2",
+        "icon_url": "img/steam_awards/2020/labor_of_love.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "most_innovative_gameplay",
+      "award_name": "Most Innovative Gameplay",
+      "winner": {
+        "game_id": "death_stranding_directors_cut",
+        "game_name": "DEATH STRANDING DIRECTOR'S CUT",
+        "icon_url": "img/steam_awards/2020/most_innovative_gameplay.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_story_rich_game",
+      "award_name": "Outstanding Story-Rich Game",
+      "winner": {
+        "game_id": "red_dead_redemption_2",
+        "game_name": "Red Dead Redemption 2",
+        "icon_url": "img/steam_awards/2020/outstanding_story_rich_game.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_visual_style",
+      "award_name": "Outstanding Visual Style",
+      "winner": {
+        "game_id": "ori_and_the_will_of_the_wisps",
+        "game_name": "Ori and the Will of the Wisps",
+        "icon_url": "img/steam_awards/2020/outstanding_visual_style.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "sit_back_and_relax",
+      "award_name": "Sit Back and Relax",
+      "winner": {
+        "game_id": "the_sims_4",
+        "game_name": "The Sims™ 4",
+        "icon_url": "img/steam_awards/2020/sit_back_and_relax.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "vr_game_of_the_year",
+      "award_name": "VR Game of the Year",
+      "winner": {
+        "game_id": "half_life_alyx",
+        "game_name": "Half-Life: Alyx",
+        "icon_url": "img/steam_awards/2020/vr_game_of_the_year.jpg",
+        "blogger_url": "",
+        "steam_url": ""
       },
       "nominees": []
     }

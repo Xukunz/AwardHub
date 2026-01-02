@@ -3,122 +3,134 @@
   "source": "Steam Awards",
   "awards": [
     {
-      "award_id": "cyberpunk_2077",
-      "award_name": "Cyberpunk 2077",
+      "award_id": "best_game_on_the_go",
+      "award_name": "Best Game on the Go",
       "winner": {
-        "game_id": "1091500",
-        "game_name": "Cyberpunk 2077",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1091500/Cyberpunk_2077/?snr=1_steamawards___winner-capsule"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "death_stranding_directors_cut",
-      "award_name": "DEATH STRANDING DIRECTOR'S CUT",
-      "winner": {
-        "game_id": "1850570",
+        "game_id": "death_stranding_directors_cut",
         "game_name": "DEATH STRANDING DIRECTOR'S CUT",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2022/best_game_on_the_go.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1850570/DEATH_STRANDING_DIRECTORS_CUT/?snr=1_steamawards___winner-capsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "elden_ring",
-      "award_name": "ELDEN RING",
+      "award_id": "best_game_you_suck_at",
+      "award_name": "Best Game You Suck At",
       "winner": {
-        "game_id": "1245620",
+        "game_id": "elden_ring",
         "game_name": "ELDEN RING",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2022/best_game_you_suck_at.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1245620/ELDEN_RING/?snr=1_steamawards___winner-capsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "final_fantasy_vii_remake_intergrade",
-      "award_name": "FINAL FANTASY VII REMAKE INTERGRADE",
+      "award_id": "best_soundtrack",
+      "award_name": "Best Soundtrack",
       "winner": {
-        "game_id": "1462040",
+        "game_id": "final_fantasy_vii_remake_intergrade",
         "game_name": "FINAL FANTASY VII REMAKE INTERGRADE",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2022/best_soundtrack.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1462040/FINAL_FANTASY_VII_REMAKE_INTERGRADE/?snr=1_steamawards___winner-capsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "god_of_war",
-      "award_name": "God of War",
+      "award_id": "better_with_friends",
+      "award_name": "Better With Friends",
       "winner": {
-        "game_id": "1593500",
-        "game_name": "God of War",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1593500/God_of_War/?snr=1_steamawards___winner-capsule"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "hitman_world_of_assassination",
-      "award_name": "HITMAN World of Assassination",
-      "winner": {
-        "game_id": "1659040",
-        "game_name": "HITMAN World of Assassination",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1659040/HITMAN_World_of_Assassination/?snr=1_steamawards___winner-capsule"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "lego_star_wars_the_skywalker_saga",
-      "award_name": "LEGO® Star Wars™: The Skywalker Saga",
-      "winner": {
-        "game_id": "920210",
-        "game_name": "LEGO® Star Wars™: The Skywalker Saga",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/920210/LEGO_Star_Wars_The_Skywalker_Saga/?snr=1_steamawards___winner-capsule"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "marvels_spider_man_miles_morales",
-      "award_name": "Marvel’s Spider-Man: Miles Morales",
-      "winner": {
-        "game_id": "1817190",
-        "game_name": "Marvel’s Spider-Man: Miles Morales",
-        "icon_url": "img/*",
-        "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1817190/Marvels_SpiderMan_Miles_Morales/?snr=1_steamawards___winner-capsule"
-      },
-      "nominees": []
-    },
-    {
-      "award_id": "raft",
-      "award_name": "Raft",
-      "winner": {
-        "game_id": "648800",
+        "game_id": "raft",
         "game_name": "Raft",
-        "icon_url": "img/*",
+        "icon_url": "img/steam_awards/2022/better_with_friends.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/648800/Raft/?snr=1_steamawards___winner-capsule"
+        "steam_url": ""
       },
       "nominees": []
     },
     {
-      "award_id": "stray",
-      "award_name": "Stray",
+      "award_id": "game_of_the_year",
+      "award_name": "Game of the Year",
       "winner": {
-        "game_id": "1332010",
-        "game_name": "Stray",
-        "icon_url": "img/*",
+        "game_id": "elden_ring",
+        "game_name": "ELDEN RING",
+        "icon_url": "img/steam_awards/2022/game_of_the_year.jpg",
         "blogger_url": "",
-        "steam_url": "https://store.steampowered.com/app/1332010/Stray/?snr=1_steamawards___winner-capsule"
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "labor_of_love",
+      "award_name": "Labor of Love",
+      "winner": {
+        "game_id": "cyberpunk_2077",
+        "game_name": "Cyberpunk 2077",
+        "icon_url": "img/steam_awards/2022/labor_of_love.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "most_innovative_gameplay",
+      "award_name": "Most Innovative Gameplay",
+      "winner": {
+        "game_id": "stray",
+        "game_name": "Stray",
+        "icon_url": "img/steam_awards/2022/most_innovative_gameplay.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_story_rich_game",
+      "award_name": "Outstanding Story-Rich Game",
+      "winner": {
+        "game_id": "god_of_war",
+        "game_name": "God of War",
+        "icon_url": "img/steam_awards/2022/outstanding_story_rich_game.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "outstanding_visual_style",
+      "award_name": "Outstanding Visual Style",
+      "winner": {
+        "game_id": "marvels_spider_man_miles_morales",
+        "game_name": "Marvel’s Spider-Man: Miles Morales",
+        "icon_url": "img/steam_awards/2022/outstanding_visual_style.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "sit_back_and_relax",
+      "award_name": "Sit Back and Relax",
+      "winner": {
+        "game_id": "lego_star_wars_the_skywalker_saga",
+        "game_name": "LEGO® Star Wars™: The Skywalker Saga",
+        "icon_url": "img/steam_awards/2022/sit_back_and_relax.jpg",
+        "blogger_url": "",
+        "steam_url": ""
+      },
+      "nominees": []
+    },
+    {
+      "award_id": "vr_game_of_the_year",
+      "award_name": "VR Game of the Year",
+      "winner": {
+        "game_id": "hitman_world_of_assassination",
+        "game_name": "HITMAN World of Assassination",
+        "icon_url": "img/steam_awards/2022/vr_game_of_the_year.jpg",
+        "blogger_url": "",
+        "steam_url": ""
       },
       "nominees": []
     }
