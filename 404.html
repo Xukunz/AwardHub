@@ -2,22 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <script>
-    if (location.pathname === "/" || location.pathname === "/index.html") {
-      location.replace("/steamawards/");
-    }
-  </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AwardHub - Steam Game Awards</title>
   <meta name="description" content="AwardHub showcases Steam Game Awards by year, including winners/nominees with game icons and links to Blogger posts." />
-  <link rel="icon" href="favicon.ico" />
-  <link rel="stylesheet" href="css/style.css" />
+
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
   <header class="topbar">
-    <a class="brand" href="#/">
-      <img class="brand__logo" src="icon.svg" alt="AwardHub" />
+    <a class="brand" href="/steamawards/">
+      <img class="brand__logo" src="/icon.svg" alt="AwardHub" />
       <div class="brand__text">
         <div class="brand__name">AwardHub</div>
         <div class="brand__sub">Steam Game Awards Showcase</div>
@@ -25,8 +22,8 @@
     </a>
 
     <nav class="nav">
-      <a class="nav__link" href="#/">Home</a>
-      <a class="nav__link" href="#/steam-awards/2024">Steam Awards</a>
+      <a class="nav__link" href="/steamawards/">Home</a>
+      <a class="nav__link" href="/steamawards/2024/">Steam Awards</a>
     </nav>
   </header>
 
@@ -42,6 +39,6 @@
     </div>
   </footer>
 
-  <script src="js/app.js" defer></script>
+  <script src="/js/app.js" defer></script>
 </body>
 </html>
