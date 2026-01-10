@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <script>
+    if (location.pathname === "/" || location.pathname === "/index.html") {
+      location.replace("/steamawards/");
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AwardHub - Steam Game Awards</title>
   <meta name="description" content="AwardHub showcases Steam Game Awards by year, including winners/nominees with game icons and links to Blogger posts." />
