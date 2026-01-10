@@ -1,4 +1,4 @@
-/* AwardHub - minimal HTML5 SPA (hash router) */
+/* AwardHub - minimal HTML5 SPA (history router) */
 
 const APP = document.getElementById("app");
 const YEAR_NOW = document.getElementById("yearNow");
@@ -11,12 +11,6 @@ const SHEET_API_URL =
 // Memory Cache
 let _sheetCache = null;
 
-/**
- * Add new years here when you ship new JSON files.
- * Example data path: data/steam_awards_2024.json
- */
-const AVAILABLE_YEARS = [2024, 2023, 2022, 2021, 2020, 2019, 2018];
-
 /** ---- Utils ---- **/
 function escapeHtml(s) {
   return String(s)
@@ -27,9 +21,17 @@ function escapeHtml(s) {
     .replaceAll("'", "&#39;");
 }
 
-function parseHashRoute() {
-  const hash = location.hash || "#/";
-  const path = hash.replace(/^#/, "");
+function normalizePath(p) {
+  // 统一：保证以 / 开头，去掉多余的末尾 /
+  if (!p) return "/";
+  let x = p.startsWith("/") ? p : "/" + p;
+  x = x.replace(/\/+$/, "");
+  return x === "" ? "/" : x;
+}
+
+function parsePathRoute() {
+  // 读 location.pathname（History 模式）
+  const path = normalizePath(location.pathname);
   const parts = path.split("/").filter(Boolean);
   return parts;
 }
@@ -76,11 +78,14 @@ function buildYearDataFromRows(year, rows) {
       const winnerName = String(r.Winner || "").trim() || "Unknown Game";
 
       return {
-        award_id: awardName.toLowerCase().replace(/\s+/g, "_").replace(/[^\w_]/g, ""),
+        award_id: awardName
+          .toLowerCase()
+          .replace(/\s+/g, "_")
+          .replace(/[^\w_]/g, ""),
         award_name: awardName,
         winner: {
           game_name: winnerName,
-          icon_url: "img/placeholder.png", // 你表里没提供就先用占位图
+          icon_url: "/img/placeholder.png", // 绝对路径更稳
           blogger_url: "",
           steam_url: ""
         },
@@ -110,16 +115,27 @@ async function fetchYearData(year) {
   return buildYearDataFromRows(year, rows);
 }
 
-
 function imgWithFallback(url) {
-  const safe = escapeHtml(url || "img/placeholder.png");
+  const safe = escapeHtml(url || "/img/placeholder.png");
   return `
     <img class="gameCard__img"
          src="${safe}"
          alt=""
          loading="lazy"
-         onerror="this.onerror=null;this.src='img/placeholder.png';" />
+         onerror="this.onerror=null;this.src='/img/placeholder.png';" />
   `;
+}
+
+/** ---- Navigation (History) ---- **/
+function navigate(to) {
+  const url = normalizePath(to) + "/"; // 统一末尾带 /
+  history.pushState({}, "", url);
+  route();
+}
+
+function replace(to) {
+  const url = normalizePath(to) + "/";
+  history.replaceState({}, "", url);
 }
 
 /** ---- Views ---- **/
@@ -132,7 +148,7 @@ async function renderHome() {
     const yearsHtml = years
       .map((y) => {
         return `
-          <a class="card yearCard" href="#/steam-awards/${y}" aria-label="Steam Awards ${y}">
+          <a class="card yearCard" href="/steamawards/${y}/" aria-label="Steam Awards ${y}">
             <div>
               <div class="yearCard__year">${y}</div>
               <div class="yearCard__meta">Steam Game Awards</div>
@@ -175,7 +191,7 @@ function renderYearHeader(year, awardCount, source) {
       <div class="toolbar">
         <input id="searchBox" class="input" placeholder="Search by game name (live filter)" />
         <span class="badge">Year: ${year}</span>
-        <a class="badge" href="#/">Back to Home</a>
+        <a class="badge" href="/steamawards/">Back</a>
       </div>
     </div>
   `;
@@ -205,10 +221,9 @@ function renderAwardSection(award) {
   `;
 }
 
-
 function renderGameCard(game, isWinner) {
   const name = escapeHtml(game.game_name || "Unknown Game");
-  const icon = game.icon_url || "img/placeholder.png";
+  const icon = game.icon_url || "/img/placeholder.png";
   const blogger = game.blogger_url || "";
   const steam = game.steam_url || "";
 
@@ -249,19 +264,27 @@ function applySearchFilter(keyword) {
 
 /** ---- Router ---- **/
 async function route() {
-  const parts = parseHashRoute();
+  const parts = parsePathRoute();
 
-  // #/ => home
-if (parts.length === 0) {
-  await renderHome();
-  return;
-}
+  // 根路径：直接跳到 /steamawards/
+  if (parts.length === 0) {
+    replace("/steamawards");
+    await renderHome();
+    return;
+  }
 
-  // #/steam-awards/2024
-  if (parts[0] === "steam-awards") {
+  // /steamawards 或 /steamawards/2024
+  if (parts[0] === "steamawards") {
+    // /steamawards/ => 列年份
+    if (parts.length === 1) {
+      await renderHome();
+      return;
+    }
+
+    // /steamawards/2024/
     const year = Number(parts[1]);
     if (!year || !Number.isFinite(year)) {
-      setError('Invalid year. Example: "#/steam-awards/2024"');
+      setError('Invalid year. Example: "/steamawards/2024/"');
       return;
     }
 
@@ -290,11 +313,31 @@ if (parts.length === 0) {
       <h1 class="hero__title">404</h1>
       <p class="hero__desc">The page you’re looking for doesn’t exist.</p>
       <div class="toolbar">
-        <a class="badge" href="#/">Back to Home</a>
+        <a class="badge" href="/steamawards/">Back</a>
       </div>
     </div>
   `;
 }
 
-window.addEventListener("hashchange", route);
+/** ---- Hook: intercept internal links ---- **/
+document.addEventListener("click", (e) => {
+  const a = e.target.closest("a");
+  if (!a) return;
+
+  const href = a.getAttribute("href");
+  if (!href) return;
+
+  // 外链 / mailto / tel / 纯锚点 不拦
+  if (href.startsWith("http://") || href.startsWith("https://")) return;
+  if (href.startsWith("mailto:") || href.startsWith("tel:")) return;
+  if (href.startsWith("#")) return;
+
+  // 只拦截站内绝对路径
+  if (!href.startsWith("/")) return;
+
+  e.preventDefault();
+  navigate(href);
+});
+
+window.addEventListener("popstate", route);
 window.addEventListener("DOMContentLoaded", route);
