@@ -4,6 +4,13 @@ const APP = document.getElementById("app");
 const YEAR_NOW = document.getElementById("yearNow");
 if (YEAR_NOW) YEAR_NOW.textContent = String(new Date().getFullYear());
 
+// Google Sheet JSON API（Apps Script Web App）
+const SHEET_API_URL =
+  "https://script.google.com/macros/s/AKfycbwqm5cQV5jB7QHkAgRAySN4ie9Q1ugEuH8EwwygkDsHaZn21vqMrsiRXk-GJrH5ElRN/exec?sheet=steam_awards_all";
+
+// Memory Cache
+let _sheetCache = null;
+
 /**
  * Add new years here when you ship new JSON files.
  * Example data path: data/steam_awards_2024.json
@@ -35,12 +42,74 @@ function setError(msg) {
   APP.innerHTML = `<div class="notice">❌ ${escapeHtml(msg)}</div>`;
 }
 
-async function fetchYearData(year) {
-  const url = `data/steam_awards_${year}.json`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to load: ${url} (HTTP ${res.status})`);
-  return await res.json();
+async function fetchSheetRows() {
+  if (_sheetCache) return _sheetCache;
+
+  const res = await fetch(SHEET_API_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to load sheet api (HTTP ${res.status})`);
+
+  const json = await res.json();
+  if (!json || json.ok !== true) {
+    throw new Error(json?.error || "Sheet API returned not ok");
+  }
+
+  const rows = Array.isArray(json.data) ? json.data : [];
+  _sheetCache = rows;
+  return rows;
 }
+
+function getAvailableYearsFromRows(rows) {
+  const years = new Set();
+  rows.forEach((r) => {
+    const y = Number(r.Year);
+    if (Number.isFinite(y)) years.add(y);
+  });
+  return Array.from(years).sort((a, b) => b - a);
+}
+
+// 把扁平 rows => 你页面需要的 awards 结构
+function buildYearDataFromRows(year, rows) {
+  const awards = rows
+    .filter((r) => Number(r.Year) === Number(year))
+    .map((r, idx) => {
+      const awardName = String(r.Title || "").trim() || `Award ${idx + 1}`;
+      const winnerName = String(r.Winner || "").trim() || "Unknown Game";
+
+      return {
+        award_id: awardName.toLowerCase().replace(/\s+/g, "_").replace(/[^\w_]/g, ""),
+        award_name: awardName,
+        winner: {
+          game_name: winnerName,
+          icon_url: "img/placeholder.png", // 你表里没提供就先用占位图
+          blogger_url: "",
+          steam_url: ""
+        },
+        nominees: [] // 明确置空
+      };
+    });
+
+  // 去重（如果同一年同奖项重复）
+  const seen = new Set();
+  const deduped = [];
+  for (const a of awards) {
+    const key = `${year}__${a.award_name}__${a.winner.game_name}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(a);
+  }
+
+  return {
+    year,
+    source: "Steam Awards (Google Sheet)",
+    awards: deduped
+  };
+}
+
+async function fetchYearData(year) {
+  const rows = await fetchSheetRows();
+  return buildYearDataFromRows(year, rows);
+}
+
 
 function imgWithFallback(url) {
   const safe = escapeHtml(url || "img/placeholder.png");
@@ -54,40 +123,45 @@ function imgWithFallback(url) {
 }
 
 /** ---- Views ---- **/
-function renderHome() {
-  const yearsHtml = AVAILABLE_YEARS
-    .slice()
-    .sort((a, b) => b - a)
-    .map((y) => {
-      return `
-        <a class="card yearCard" href="#/steam-awards/${y}" aria-label="Steam Awards ${y}">
-          <div>
-            <div class="yearCard__year">${y}</div>
-            <div class="yearCard__meta">Steam Game Awards</div>
-          </div>
-          <div class="badge">Open</div>
-        </a>
-      `;
-    })
-    .join("");
+async function renderHome() {
+  setLoading();
+  try {
+    const rows = await fetchSheetRows();
+    const years = getAvailableYearsFromRows(rows);
 
-  APP.innerHTML = `
-    <div class="hero">
-      <h1 class="hero__title">AwardHub</h1>
-      <p class="hero__desc">
-        A clean, static showcase for Steam Game Awards by year.
-        Each award includes a Winner and Nominees. Click a game card to open its Blogger post.
-      </p>
+    const yearsHtml = years
+      .map((y) => {
+        return `
+          <a class="card yearCard" href="#/steam-awards/${y}" aria-label="Steam Awards ${y}">
+            <div>
+              <div class="yearCard__year">${y}</div>
+              <div class="yearCard__meta">Steam Game Awards</div>
+            </div>
+            <div class="badge">Open</div>
+          </a>
+        `;
+      })
+      .join("");
 
-      <div class="grid grid--years">
-        ${yearsHtml}
+    APP.innerHTML = `
+      <div class="hero">
+        <h1 class="hero__title">AwardHub</h1>
+        <p class="hero__desc">
+          Steam Awards data is loaded live from Google Sheet. Click a year to view winners.
+        </p>
+
+        <div class="grid grid--years">
+          ${yearsHtml}
+        </div>
+
+        <div class="notice">
+          Data source: Google Sheet → Apps Script JSON API.
+        </div>
       </div>
-
-      <div class="notice">
-        Note: If a card shows “Post not published”, it means <code>blogger_url</code> is missing in your data.
-      </div>
-    </div>
-  `;
+    `;
+  } catch (e) {
+    setError(e.message || String(e));
+  }
 }
 
 function renderYearHeader(year, awardCount, source) {
@@ -115,28 +189,22 @@ function renderAwardSection(award) {
     ? renderGameCard(winner, true)
     : `<div class="notice">No winner data for this award yet.</div>`;
 
-  const nominees = Array.isArray(award.nominees) ? award.nominees : [];
-  const nomineesHtml = nominees.length
-    ? nominees.map((g) => renderGameCard(g, false)).join("")
-    : `<div class="notice">No nominees data for this award yet.</div>`;
-
   return `
     <section class="section" data-award-id="${escapeHtml(award.award_id || "")}">
       <div class="section__head">
         <div>
           <h2 class="section__title">${awardName}</h2>
-          <div class="section__sub">Winner + Nominees</div>
+          <div class="section__sub">Winner</div>
         </div>
-        <span class="badge">${nominees.length} nominees</span>
       </div>
 
       <div class="gameGrid">
         ${winnerCard}
-        ${nomineesHtml}
       </div>
     </section>
   `;
 }
+
 
 function renderGameCard(game, isWinner) {
   const name = escapeHtml(game.game_name || "Unknown Game");
@@ -184,10 +252,10 @@ async function route() {
   const parts = parseHashRoute();
 
   // #/ => home
-  if (parts.length === 0) {
-    renderHome();
-    return;
-  }
+if (parts.length === 0) {
+  await renderHome();
+  return;
+}
 
   // #/steam-awards/2024
   if (parts[0] === "steam-awards") {
