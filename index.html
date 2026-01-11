@@ -2,29 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-<script>
-  /**
-   * Restore the original deep-link path captured by 404.html.
-   * This lets the SPA router handle deep links on GitHub Pages.
-   */
-  (function () {
-    var redirect = sessionStorage.getItem("awardhub:redirect");
-    if (redirect) {
-      sessionStorage.removeItem("awardhub:redirect");
-      history.replaceState(null, "", redirect);
-    }
-  })();
-</script>
+
+  <!-- =========================================================
+       GitHub Pages SPA deep-link restore (HASH fallback)
+       ---------------------------------------------------------
+       When a user directly opens:
+         /steamawards/2018/
+       GitHub Pages serves 404.html first.
+       404.html redirects to:
+         /#/steamawards/2018/
+       This script converts it back to:
+         /steamawards/2018/
+       BEFORE app.js runs.
+       ========================================================= -->
+  <script>
+    (function () {
+      if (location.hash && location.hash.startsWith("#/")) {
+        var restoredPath = location.hash.slice(1); // remove leading "#"
+        history.replaceState(null, "", restoredPath);
+      }
+    })();
+  </script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AwardHub - Steam Game Awards</title>
-  <meta name="description" content="AwardHub showcases Steam Game Awards by year, including winners/nominees with game icons and links to Blogger posts." />
+  <meta name="description"
+        content="AwardHub showcases Steam Game Awards by year, including winners with game icons and external links." />
 
+  <!-- Always use absolute paths on GitHub Pages -->
   <link rel="icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
+  <!-- =========================================================
+       Top navigation bar
+       ========================================================= -->
   <header class="topbar">
     <a class="brand" href="/steamawards/">
       <img class="brand__logo" src="/icon.svg" alt="AwardHub" />
@@ -40,10 +53,16 @@
     </nav>
   </header>
 
+  <!-- =========================================================
+       Main SPA mount point
+       ========================================================= -->
   <main class="container">
     <section id="app" class="app"></section>
   </main>
 
+  <!-- =========================================================
+       Footer
+       ========================================================= -->
   <footer class="footer">
     <div class="footer__inner">
       <span>© <span id="yearNow"></span> AwardHub</span>
@@ -52,6 +71,11 @@
     </div>
   </footer>
 
+  <!-- =========================================================
+       Main application script
+       - MUST be defer
+       - MUST be loaded after hash-restore script above
+       ========================================================= -->
   <script src="/js/app.js" defer></script>
 </body>
 </html>

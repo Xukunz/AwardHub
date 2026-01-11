@@ -7,21 +7,18 @@
 
   <script>
     /**
-     * GitHub Pages SPA fallback for History API routing.
+     * GitHub Pages SPA fallback (HASH-based, very reliable).
      *
-     * Problem:
-     * - Directly opening /steamawards/2018/ makes GitHub Pages look for a real file.
-     * - It doesn't exist, so GitHub Pages serves /404.html.
+     * When a user directly opens /steamawards/2018/,
+     * GitHub Pages cannot find that file and serves 404.html.
      *
-     * Fix:
-     * - Store the originally requested path.
-     * - Redirect to "/" (where index.html exists).
-     * - index.html will restore the path and let the SPA router render correctly.
+     * We redirect to "/#<original_path>" so index.html can restore it.
+     * This avoids sessionStorage quirks and works in strict privacy modes.
      */
     (function () {
-      var redirect = location.pathname + location.search + location.hash;
-      sessionStorage.setItem("awardhub:redirect", redirect);
-      location.replace("/");
+      var path = location.pathname + location.search + location.hash;
+      // Redirect to site root with a hash that contains the original path
+      location.replace("/#" + path);
     })();
   </script>
 </head>
