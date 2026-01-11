@@ -2,6 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+<script>
+  /**
+   * Restore the original deep-link path captured by 404.html.
+   * This lets the SPA router handle deep links on GitHub Pages.
+   */
+  (function () {
+    var redirect = sessionStorage.getItem("awardhub:redirect");
+    if (redirect) {
+      sessionStorage.removeItem("awardhub:redirect");
+      history.replaceState(null, "", redirect);
+    }
+  })();
+</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AwardHub - Steam Game Awards</title>
