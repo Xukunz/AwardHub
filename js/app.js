@@ -1,17 +1,50 @@
-/* AwardHub - minimal HTML5 SPA (history router) */
+/* AwardHub - minimal HTML5 SPA (History API router)
+ *
+ * Key design:
+ * - Static site (GitHub Pages compatible) + client-side routing (History API).
+ * - Data is loaded live from Google Sheet via Apps Script JSON API.
+ * - UI is rendered with vanilla JS (no framework).
+ * - Game icon URLs are derived from "year + winner game name" -> slug -> file path.
+ * - Image fallback: try .webp, then .jpg, then .png, finally placeholder.
+ *
+ * IMPORTANT:
+ * - History routing requires server fallback (e.g., GitHub Pages 404.html -> index.html).
+ * - Use absolute paths (/steamawards/..., /img/...) to avoid path issues under nested routes.
+ */
 
 const APP = document.getElementById("app");
 const YEAR_NOW = document.getElementById("yearNow");
 if (YEAR_NOW) YEAR_NOW.textContent = String(new Date().getFullYear());
 
-// Google Sheet JSON API（Apps Script Web App）
+/**
+ * Google Sheet JSON API endpoint (Apps Script Web App).
+ * It returns:
+ * {
+ *   ok: true,
+ *   sheet: "...",
+ *   rows: N,
+ *   data: [{Year, Title, Winner, ...}, ...]
+ * }
+ */
 const SHEET_API_URL =
   "https://script.google.com/macros/s/AKfycbwqm5cQV5jB7QHkAgRAySN4ie9Q1ugEuH8EwwygkDsHaZn21vqMrsiRXk-GJrH5ElRN/exec?sheet=steam_awards_all";
 
-// Memory Cache
+/**
+ * Simple in-memory cache for sheet data.
+ * - Avoids repeated network calls when navigating between years.
+ * - Reset only when page reloads.
+ */
 let _sheetCache = null;
 
-/** ---- Utils ---- **/
+/** ---------------------------
+ *  Utilities
+ *  ---------------------------
+ */
+
+/**
+ * Escape string for safe insertion into HTML (prevents HTML injection).
+ * Use it for any user-controlled / external content (sheet rows).
+ */
 function escapeHtml(s) {
   return String(s)
     .replaceAll("&", "&amp;")
@@ -21,51 +54,114 @@ function escapeHtml(s) {
     .replaceAll("'", "&#39;");
 }
 
+/**
+ * Convert a game name into a filename-friendly slug that matches your repo naming rules.
+ *
+ * Repo naming convention (based on your screenshots):
+ * - lowercase
+ * - words separated by underscore
+ * - special symbols removed
+ * - IMPORTANT: "'s" becomes "_s" (e.g., Assassin's -> assassin_s)
+ *
+ * Examples:
+ * - "Assassin's Creed® Odyssey" -> "assassin_s_creed_odyssey"
+ * - "Tom Clancy's Rainbow Six® Siege X" -> "tom_clancy_s_rainbow_siege_x"
+ * - "Marvel's Guardians of the Galaxy" -> "marvel_s_guardians_of_the_galaxy"
+ */
 function slugifyGameName(name) {
   if (!name) return "";
 
   return String(name)
     .toLowerCase()
     .trim()
-    .replace(/[\u2012\u2013\u2014\u2212]/g, "-") // 各种破折号统一
+
+    // Normalize different dash characters (– — etc.) to a normal hyphen.
+    // Then we later convert non-alphanumerics to underscores.
+    .replace(/[\u2012\u2013\u2014\u2212]/g, "-")
+
+    // Remove common trademark symbols
     .replace(/[®™©]/g, "")
+
+    // Normalize ampersand
     .replace(/&/g, "and")
-    .replace(/['’]/g, "")                       // 关键：去撇号
+
+    // Critical: convert possessive "'s" or "’s" into "_s" to match your repo filenames
+    .replace(/['’]s\b/g, "_s")
+
+    // Remove remaining apostrophes
+    .replace(/['’]/g, "")
+
+    // Convert everything not [a-z0-9] into underscore
     .replace(/[^a-z0-9]+/g, "_")
+
+    // Collapse multiple underscores
     .replace(/_+/g, "_")
+
+    // Trim underscores at both ends
     .replace(/^_+|_+$/g, "");
 }
 
-
+/**
+ * Build an icon URL from year + game name.
+ * The primary format is WebP:
+ *   /img/<year>/<slug>.webp
+ *
+ * Notes:
+ * - Use absolute path to avoid nested route path issues.
+ * - If slug or year is missing, return placeholder.
+ */
 function buildGameImageUrl(year, gameName) {
   const slug = slugifyGameName(gameName);
   if (!year || !slug) return "/img/placeholder.png";
   return `/img/${year}/${slug}.webp`;
 }
 
+/**
+ * Normalize a path:
+ * - Ensure it starts with "/"
+ * - Remove trailing slashes
+ * - Return "/" for empty values
+ */
 function normalizePath(p) {
-  // 统一：保证以 / 开头，去掉多余的末尾 /
   if (!p) return "/";
   let x = p.startsWith("/") ? p : "/" + p;
   x = x.replace(/\/+$/, "");
   return x === "" ? "/" : x;
 }
 
+/**
+ * Parse the current URL as a "route parts array" using History routing.
+ * Example:
+ *   location.pathname = "/steamawards/2024/"
+ *   => ["steamawards", "2024"]
+ */
 function parsePathRoute() {
-  // 读 location.pathname（History 模式）
   const path = normalizePath(location.pathname);
   const parts = path.split("/").filter(Boolean);
   return parts;
 }
 
+/**
+ * Render a temporary loading state.
+ * Called before async work like fetching data.
+ */
 function setLoading() {
   APP.innerHTML = `<div class="notice">Loading…</div>`;
 }
 
+/**
+ * Render an error message in the main app container.
+ * Escapes content to avoid HTML injection.
+ */
 function setError(msg) {
   APP.innerHTML = `<div class="notice">❌ ${escapeHtml(msg)}</div>`;
 }
 
+/**
+ * Fetch all rows from the Sheet API (cached).
+ * - Uses "no-store" to avoid browser caching stale responses.
+ * - Validates the API response.
+ */
 async function fetchSheetRows() {
   if (_sheetCache) return _sheetCache;
 
@@ -82,6 +178,10 @@ async function fetchSheetRows() {
   return rows;
 }
 
+/**
+ * Extract and sort all available years found in the sheet.
+ * The UI uses these to render year cards on the home page.
+ */
 function getAvailableYearsFromRows(rows) {
   const years = new Set();
   rows.forEach((r) => {
@@ -91,7 +191,22 @@ function getAvailableYearsFromRows(rows) {
   return Array.from(years).sort((a, b) => b - a);
 }
 
-// 把扁平 rows => 你页面需要的 awards 结构
+/**
+ * Convert flat sheet rows into the structure used by the UI.
+ * - Filter only rows of the requested year.
+ * - Each row becomes an "award" section with a winner card.
+ * - icon_url is derived from (year, winnerName).
+ *
+ * Data output shape:
+ * {
+ *   year: 2018,
+ *   source: "...",
+ *   awards: [
+ *     { award_id, award_name, winner: { game_name, icon_url, ... }, nominees: [] },
+ *     ...
+ *   ]
+ * }
+ */
 function buildYearDataFromRows(year, rows) {
   const awards = rows
     .filter((r) => Number(r.Year) === Number(year))
@@ -100,22 +215,36 @@ function buildYearDataFromRows(year, rows) {
       const winnerName = String(r.Winner || "").trim() || "Unknown Game";
 
       return {
+        // award_id is used as a stable DOM attribute for sections
         award_id: awardName
           .toLowerCase()
           .replace(/\s+/g, "_")
           .replace(/[^\w_]/g, ""),
+
         award_name: awardName,
+
         winner: {
           game_name: winnerName,
+
+          // Primary icon path is webp based on repo naming convention
           icon_url: buildGameImageUrl(year, winnerName),
+
+          // Reserved for future use (blogger post URL)
           blogger_url: "",
+
+          // Reserved for future use (steam store URL)
           steam_url: ""
         },
-        nominees: [] // 明确置空
+
+        // Nominees currently not displayed; keep for possible future
+        nominees: []
       };
     });
 
-  // 去重（如果同一年同奖项重复）
+  /**
+   * De-duplicate in case the sheet contains duplicate award entries:
+   * - We use year + award_name + winner_name as the key.
+   */
   const seen = new Set();
   const deduped = [];
   for (const a of awards) {
@@ -132,11 +261,27 @@ function buildYearDataFromRows(year, rows) {
   };
 }
 
+/**
+ * Fetch a single year's data.
+ * Currently this is computed from the full sheet rows.
+ * (If your dataset becomes huge, you can optimize by fetching only a year subset.)
+ */
 async function fetchYearData(year) {
   const rows = await fetchSheetRows();
   return buildYearDataFromRows(year, rows);
 }
 
+/**
+ * Render an <img> tag with progressive fallbacks:
+ * - Try the provided src (usually .webp)
+ * - If fails: try .jpg
+ * - If fails: try .png
+ * - If fails: use placeholder
+ *
+ * Why:
+ * - During migration to WebP, some images might still exist only as jpg/png.
+ * - This avoids broken icons even if the repo isn't fully converted yet.
+ */
 function imgWithFallback(url) {
   const safe = escapeHtml(url || "/img/placeholder.png");
   return `
@@ -147,27 +292,58 @@ function imgWithFallback(url) {
          onerror="
            const src=this.src;
            const tried=this.dataset.tried||'';
-           if(!tried){ this.dataset.tried='jpg'; this.src=src.replace(/\\.webp($|\\?)/i,'.jpg$1'); return; }
-           if(tried==='jpg'){ this.dataset.tried='png'; this.src=src.replace(/\\.jpg($|\\?)/i,'.png$1'); return; }
-           this.onerror=null; this.src='/img/placeholder.png';
+           if(!tried){
+             this.dataset.tried='jpg';
+             this.src=src.replace(/\\.webp($|\\?)/i,'.jpg$1');
+             return;
+           }
+           if(tried==='jpg'){
+             this.dataset.tried='png';
+             this.src=src.replace(/\\.jpg($|\\?)/i,'.png$1');
+             return;
+           }
+           this.onerror=null;
+           this.src='/img/placeholder.png';
          " />
   `;
 }
 
+/** ---------------------------
+ *  Navigation (History API)
+ *  ---------------------------
+ */
 
-/** ---- Navigation (History) ---- **/
+/**
+ * Navigate to a new internal route using History API without full page reload.
+ * - Ensures normalized trailing slash for consistency.
+ * - Calls route() to render the new view.
+ */
 function navigate(to) {
-  const url = normalizePath(to) + "/"; // 统一末尾带 /
+  const url = normalizePath(to) + "/";
   history.pushState({}, "", url);
   route();
 }
 
+/**
+ * Replace current URL (no new history entry).
+ * Useful for default redirects (e.g., "/" -> "/steamawards/").
+ */
 function replace(to) {
   const url = normalizePath(to) + "/";
   history.replaceState({}, "", url);
 }
 
-/** ---- Views ---- **/
+/** ---------------------------
+ *  Views
+ *  ---------------------------
+ */
+
+/**
+ * Render the home page:
+ * - Loads sheet rows (cached).
+ * - Builds a list of available years.
+ * - Renders year cards that link to /steamawards/<year>/
+ */
 async function renderHome() {
   setLoading();
   try {
@@ -176,6 +352,7 @@ async function renderHome() {
 
     const yearsHtml = years
       .map((y) => {
+        // Use absolute path so it works under nested routes and history mode
         return `
           <a class="card yearCard" href="/steamawards/${y}/" aria-label="Steam Awards ${y}">
             <div>
@@ -209,6 +386,10 @@ async function renderHome() {
   }
 }
 
+/**
+ * Render the top header area for a year page.
+ * Includes search input and back link.
+ */
 function renderYearHeader(year, awardCount, source) {
   return `
     <div class="hero">
@@ -226,6 +407,10 @@ function renderYearHeader(year, awardCount, source) {
   `;
 }
 
+/**
+ * Render one award section (title + winner card).
+ * Nominees are intentionally omitted in the UI.
+ */
 function renderAwardSection(award) {
   const awardName = escapeHtml(award.award_name || award.award_id || "Unknown Award");
   const winner = award.winner;
@@ -250,6 +435,11 @@ function renderAwardSection(award) {
   `;
 }
 
+/**
+ * Render one game card.
+ * - Uses data-game-name for client-side search filtering.
+ * - Uses imgWithFallback() for progressive image fallback.
+ */
 function renderGameCard(game, isWinner) {
   const name = escapeHtml(game.game_name || "Unknown Game");
   const icon = game.icon_url || "/img/placeholder.png";
@@ -282,6 +472,11 @@ function renderGameCard(game, isWinner) {
   `;
 }
 
+/**
+ * Apply live search filtering to all game cards on the current page.
+ * - This is a client-side filter; no network calls.
+ * - It matches case-insensitively against the rendered game name.
+ */
 function applySearchFilter(keyword) {
   const k = keyword.trim().toLowerCase();
   const cards = APP.querySelectorAll(".gameCard");
@@ -291,25 +486,35 @@ function applySearchFilter(keyword) {
   });
 }
 
-/** ---- Router ---- **/
+/** ---------------------------
+ *  Router
+ *  ---------------------------
+ *
+ * Supported routes:
+ * - /steamawards/           -> home (list years)
+ * - /steamawards/<year>/    -> year details
+ *
+ * Default:
+ * - "/" auto-replaces to "/steamawards/"
+ */
 async function route() {
   const parts = parsePathRoute();
 
-if (parts.length === 0) {
-  replace("/steamawards");
-  route();   // 或者 return; 让 popstate/DOMContentLoaded 再触发也行
-  return;
-}
+  // Root path: redirect to /steamawards/ (History replace to avoid extra history entry)
+  if (parts.length === 0) {
+    replace("/steamawards");
+    return;
+  }
 
-  // /steamawards 或 /steamawards/2024
+  // /steamawards or /steamawards/<year>
   if (parts[0] === "steamawards") {
-    // /steamawards/ => 列年份
+    // /steamawards/ -> list years
     if (parts.length === 1) {
       await renderHome();
       return;
     }
 
-    // /steamawards/2024/
+    // /steamawards/<year>/
     const year = Number(parts[1]);
     if (!year || !Number.isFinite(year)) {
       setError('Invalid year. Example: "/steamawards/2024/"');
@@ -325,6 +530,7 @@ if (parts.length === 0) {
 
       APP.innerHTML = header + body;
 
+      // Wire up live search input
       const searchBox = document.getElementById("searchBox");
       if (searchBox) {
         searchBox.addEventListener("input", (e) => applySearchFilter(e.target.value));
@@ -335,7 +541,7 @@ if (parts.length === 0) {
     return;
   }
 
-  // Unknown route
+  // Unknown route -> show a simple 404 view (client-side)
   APP.innerHTML = `
     <div class="hero">
       <h1 class="hero__title">404</h1>
@@ -347,7 +553,16 @@ if (parts.length === 0) {
   `;
 }
 
-/** ---- Hook: intercept internal links ---- **/
+/** ---------------------------
+ *  Link interception (internal SPA navigation)
+ *  ---------------------------
+ *
+ * We intercept clicks on internal <a href="/..."> links to avoid full page reload.
+ * - External URLs (http/https) are NOT intercepted.
+ * - mailto/tel are NOT intercepted.
+ * - hash-only links are NOT intercepted.
+ * - Only absolute internal paths (starting with "/") are intercepted.
+ */
 document.addEventListener("click", (e) => {
   const a = e.target.closest("a");
   if (!a) return;
@@ -355,17 +570,29 @@ document.addEventListener("click", (e) => {
   const href = a.getAttribute("href");
   if (!href) return;
 
-  // 外链 / mailto / tel / 纯锚点 不拦
+  // Do not intercept external links
   if (href.startsWith("http://") || href.startsWith("https://")) return;
+
+  // Do not intercept special schemes
   if (href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+  // Do not intercept hash-only anchors
   if (href.startsWith("#")) return;
 
-  // 只拦截站内绝对路径
+  // Intercept only internal absolute paths
   if (!href.startsWith("/")) return;
 
   e.preventDefault();
   navigate(href);
 });
 
+/**
+ * Handle browser back/forward buttons.
+ * popstate fires when the active history entry changes.
+ */
 window.addEventListener("popstate", route);
+
+/**
+ * Initial render when the document is ready.
+ */
 window.addEventListener("DOMContentLoaded", route);
