@@ -412,7 +412,7 @@ function renderExternalButtons(winner) {
 
   const steamBtn = steamUrl
     ? `<a class="btn" href="${escapeHtml(steamUrl)}" target="_blank" rel="noopener">View on Steam</a>`
-    : `<span class="btn btn--disabled" title="steam_url is missing">Steam</span>`;
+    : `<span class="btn btn--disabled" title="steam_url is missing">Buy</span>`;
 
   return `<div class="btnRow btnRow--tight">${postBtn}${steamBtn}</div>`;
 }
