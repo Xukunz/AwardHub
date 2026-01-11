@@ -75,31 +75,28 @@ function slugifyGameName(name) {
     .toLowerCase()
     .trim()
 
-    // Normalize different dash characters (– — etc.) to a normal hyphen.
-    // Then we later convert non-alphanumerics to underscores.
-    .replace(/[\u2012\u2013\u2014\u2212]/g, "-")
+    // convert "'s" to "s" (Marvel's -> marvels)
+    .replace(/'s\b/g, "s")
 
-    // Remove common trademark symbols
-    .replace(/[®™©]/g, "")
+    // remove remaining apostrophes
+    .replace(/'/g, "")
 
-    // Normalize ampersand
+    // & -> and
     .replace(/&/g, "and")
 
-    // Critical: convert possessive "'s" or "’s" into "_s" to match your repo filenames
-    .replace(/['’]s\b/g, "_s")
+    // remove trademark symbols
+    .replace(/[®™©]/g, "")
 
-    // Remove remaining apostrophes
-    .replace(/['’]/g, "")
-
-    // Convert everything not [a-z0-9] into underscore
+    // replace non-alphanumeric with underscore
     .replace(/[^a-z0-9]+/g, "_")
 
-    // Collapse multiple underscores
+    // collapse multiple underscores
     .replace(/_+/g, "_")
 
-    // Trim underscores at both ends
+    // trim underscores
     .replace(/^_+|_+$/g, "");
 }
+
 
 /**
  * Build an icon URL from year + game name.
