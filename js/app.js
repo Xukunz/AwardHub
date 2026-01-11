@@ -603,10 +603,6 @@ if (track) {
     });
   });
 }
-
-      // Auto scroll active into view on first render
-      const active = APP.querySelector(".awardChip.is-active");
-      active?.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
     }
 
     // Persist search keyword between rerenders within the page
