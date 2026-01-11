@@ -91,15 +91,15 @@ function scrollChipIntoViewSmart(track, chip) {
 /**
  * Convert a game name into a filename-friendly slug that matches your repo naming rules.
  *
- * Repo naming convention:
+ * Your repo naming rule (based on your actual filenames in /img/<year>/):
  * - lowercase
- * - words separated by underscore
- * - special symbols removed
- *
- * Examples:
- * - "Assassin's Creed® Odyssey" -> "assassin_s_creed_odyssey"
- * - "Tom Clancy's Rainbow Six® Siege X" -> "tom_clancy_s_rainbow_siege_x"
- * - "Marvel's Guardians of the Galaxy" -> "marvel_s_guardians_of_the_galaxy"
+ * - tokens separated by underscore "_"
+ * - "'s" becomes "_s" (IMPORTANT)
+ *   Example: "Assassin's Creed" -> "assassin_s_creed"
+ * - remove trademark symbols: ® ™ ©
+ * - "&" becomes "and"
+ * - collapse repeated underscores
+ * - trim underscores
  */
 function slugifyGameName(name) {
   if (!name) return "";
@@ -108,27 +108,28 @@ function slugifyGameName(name) {
     .toLowerCase()
     .trim()
 
-    // convert "'s" to "s" (Marvel's -> marvels)
-    .replace(/'s\b/g, "s")
+    // Normalize common symbols
+    .replace(/&/g, " and ")
+    .replace(/[®™©]/g, "_")
 
-    // remove remaining apostrophes
-    .replace(/'/g, "")
+    // IMPORTANT: keep a separator for "'s"
+    // "assassin's" -> "assassin_s"
+    .replace(/'s\b/g, "_s")
 
-    // & -> and
-    .replace(/&/g, "and")
+    // Any remaining apostrophes become separators as well
+    // e.g. "dont" style vs "don_t" — this matches your existing filenames better.
+    .replace(/'/g, "_")
 
-    // remove trademark symbols
-    .replace(/[®™©]/g, "")
-
-    // replace non-alphanumeric with underscore
+    // Replace any non-alphanumeric with underscore
     .replace(/[^a-z0-9]+/g, "_")
 
-    // collapse multiple underscores
+    // Collapse multiple underscores
     .replace(/_+/g, "_")
 
-    // trim underscores
+    // Trim leading/trailing underscores
     .replace(/^_+|_+$/g, "");
 }
+
 
 /**
  * Build an icon URL from year + game name.
