@@ -20,6 +20,23 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
+
+function slugifyGameName(name) {
+  if (!name) return "";
+
+  return String(name)
+    .toLowerCase()
+    .trim()
+    .replace(/[\u2012\u2013\u2014\u2212]/g, "-") // 各种破折号统一
+    .replace(/[®™©]/g, "")
+    .replace(/&/g, "and")
+    .replace(/['’]/g, "")                       // 关键：去撇号
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+
 function buildGameImageUrl(year, gameName) {
   const slug = slugifyGameName(gameName);
   if (!year || !slug) return "/img/placeholder.png";
@@ -278,12 +295,11 @@ function applySearchFilter(keyword) {
 async function route() {
   const parts = parsePathRoute();
 
-  // 根路径：直接跳到 /steamawards/
-  if (parts.length === 0) {
-    replace("/steamawards");
-    await renderHome();
-    return;
-  }
+if (parts.length === 0) {
+  replace("/steamawards");
+  route();   // 或者 return; 让 popstate/DOMContentLoaded 再触发也行
+  return;
+}
 
   // /steamawards 或 /steamawards/2024
   if (parts[0] === "steamawards") {
