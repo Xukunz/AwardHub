@@ -1,3 +1,13 @@
+/* ============================================================================
+   Global theme variables
+   ----------------------------------------------------------------------------
+   These CSS custom properties define the site's overall visual language:
+   - Colors (background, panels, text)
+   - Border and shadow styles
+   - Corner radii and layout sizing
+   Keeping them centralized makes the design consistent and easy to tune.
+   ============================================================================ */
+
 :root{
   --bg: #0b1020;
   --panel: rgba(255,255,255,.06);
@@ -12,18 +22,29 @@
   --maxw: 1100px;
   --gap: 14px;
 
+  /* Accent colors used by UI elements such as ribbons and states. */
   --winner: #f2c14e;
   --ok: #4ade80;
   --bad: #fb7185;
 }
 
+/* ============================================================================
+   Base reset / defaults
+   ----------------------------------------------------------------------------
+   - box-sizing: border-box prevents padding from expanding element widths.
+   - full-height html/body helps with vertical layouts and sticky elements.
+   - global background uses layered radial gradients for the "glow" feel.
+   ============================================================================ */
+
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
+
 body{
   margin:0;
-  background: radial-gradient(1200px 600px at 20% 10%, rgba(99,102,241,.35), transparent 55%),
-              radial-gradient(900px 500px at 80% 0%, rgba(34,197,94,.22), transparent 55%),
-              var(--bg);
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(99,102,241,.35), transparent 55%),
+    radial-gradient(900px 500px at 80% 0%, rgba(34,197,94,.22), transparent 55%),
+    var(--bg);
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", Arial;
   line-height: 1.45;
@@ -32,11 +53,27 @@ body{
 a{ color: inherit; text-decoration: none; }
 img{ display:block; max-width:100%; }
 
+/* ============================================================================
+   Page container
+   ----------------------------------------------------------------------------
+   This controls the readable content width and padding on both sides.
+   Using min() keeps it responsive:
+   - On wide screens: capped by --maxw
+   - On narrow screens: leaves 32px total side padding
+   ============================================================================ */
+
 .container{
   width: min(var(--maxw), calc(100% - 32px));
   margin: 0 auto;
   padding: 18px 0 34px;
 }
+
+/* ============================================================================
+   Top navigation bar
+   ----------------------------------------------------------------------------
+   Sticky topbar remains visible during scroll.
+   backdrop-filter provides the frosted glass effect.
+   ============================================================================ */
 
 .topbar{
   position: sticky;
@@ -45,9 +82,7 @@ img{ display:block; max-width:100%; }
   backdrop-filter: blur(10px);
   background: rgba(10, 15, 30, .65);
   border-bottom: 1px solid var(--border);
-}
 
-.topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -92,7 +127,14 @@ img{ display:block; max-width:100%; }
   background: var(--panel);
 }
 
+/* The main app wrapper ensures the page has a minimum visual height. */
 .app{ min-height: 60vh; }
+
+/* ============================================================================
+   Hero section
+   ----------------------------------------------------------------------------
+   Used at the top of pages for title + description + toolbar.
+   ============================================================================ */
 
 .hero{
   border: 1px solid var(--border);
@@ -113,6 +155,12 @@ img{ display:block; max-width:100%; }
   max-width: 70ch;
 }
 
+/* ============================================================================
+   Generic grid helpers
+   ----------------------------------------------------------------------------
+   grid--years uses auto-fit to display responsive year cards.
+   ============================================================================ */
+
 .grid{
   display:grid;
   gap: var(--gap);
@@ -121,6 +169,13 @@ img{ display:block; max-width:100%; }
 .grid--years{
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
+
+/* ============================================================================
+   Cards (generic and year-card)
+   ----------------------------------------------------------------------------
+   Card is a reusable glass panel.
+   YearCard is a special card layout for selecting a year.
+   ============================================================================ */
 
 .card{
   border: 1px solid var(--border);
@@ -150,6 +205,13 @@ img{ display:block; max-width:100%; }
   font-size: 12px;
 }
 
+/* ============================================================================
+   Toolbar / input / badges
+   ----------------------------------------------------------------------------
+   - Toolbar wraps to multiple lines on narrow screens.
+   - Input uses flexible width with a minimum for usability.
+   ============================================================================ */
+
 .toolbar{
   display:flex;
   flex-wrap:wrap;
@@ -157,6 +219,7 @@ img{ display:block; max-width:100%; }
   align-items:center;
   margin-top: 14px;
 }
+
 .input{
   flex: 1;
   min-width: 220px;
@@ -180,6 +243,12 @@ img{ display:block; max-width:100%; }
   border: 1px solid var(--border);
   background: rgba(255,255,255,.04);
 }
+
+/* ============================================================================
+   Sections / classic grid view (older layout)
+   ----------------------------------------------------------------------------
+   These classes are still kept for the home/other pages if you use them.
+   ============================================================================ */
 
 .section{
   margin-top: 16px;
@@ -246,6 +315,7 @@ img{ display:block; max-width:100%; }
   color: var(--muted);
 }
 
+/* Ribbon for winner cards (legacy / optional usage). */
 .ribbon{
   position:absolute;
   top: 10px;
@@ -260,11 +330,18 @@ img{ display:block; max-width:100%; }
   box-shadow: 0 10px 20px rgba(0,0,0,.25);
 }
 
+/* ============================================================================
+   Buttons
+   ----------------------------------------------------------------------------
+   Used for external links (Steam/Post). Disabled buttons are non-clickable.
+   ============================================================================ */
+
 .btnRow{
   display:flex;
   gap: 8px;
   padding: 0 12px 12px;
 }
+
 .btn{
   flex: 1;
   text-align:center;
@@ -287,6 +364,16 @@ img{ display:block; max-width:100%; }
   pointer-events: none;
 }
 
+/* Tighter button row variant for the featured panel. */
+.btnRow--tight{
+  margin-top: 12px;
+  padding: 0;
+}
+
+/* ============================================================================
+   Notice blocks (info / errors / empty states)
+   ============================================================================ */
+
 .notice{
   margin-top: 14px;
   padding: 12px 14px;
@@ -295,6 +382,10 @@ img{ display:block; max-width:100%; }
   color: var(--muted);
   background: rgba(255,255,255,.03);
 }
+
+/* ============================================================================
+   Footer
+   ============================================================================ */
 
 .footer{
   border-top: 1px solid var(--border);
@@ -312,9 +403,13 @@ img{ display:block; max-width:100%; }
 }
 .footer__dot{ opacity: .6; }
 
-/* ---------------------------
-   Year page: "Featured + Overview + Carousel" layout (based on mock)
-   --------------------------- */
+/* ============================================================================
+   Year page layout: "Featured + Overview + Carousel"
+   ----------------------------------------------------------------------------
+   This is the structure based on your mock:
+   - Featured: large media on the left, overview panel on the right
+   - Carousel: horizontal scroll list of awards below
+   ============================================================================ */
 
 .yearLayout{
   margin-top: 16px;
@@ -322,7 +417,13 @@ img{ display:block; max-width:100%; }
   gap: 14px;
 }
 
-/* Featured block */
+/* ----------------------------------------------------------------------------
+   Featured panel container
+   - Uses CSS Grid with minmax() so it adapts gracefully.
+   - On large screens: two columns
+   - On smaller screens: collapses to one column
+   ---------------------------------------------------------------------------- */
+
 .featured{
   border: 1px solid var(--border);
   background: rgba(255,255,255,.04);
@@ -331,8 +432,13 @@ img{ display:block; max-width:100%; }
   box-shadow: var(--shadow);
 
   display: grid;
-  grid-template-columns: 1.65fr 1fr;
   gap: 14px;
+
+  /* Adaptive columns:
+     Left column prefers being wider but will not shrink below 420px.
+     Right column will not shrink below 280px.
+     If the container is too narrow, the media query below switches to 1 column. */
+  grid-template-columns: minmax(420px, 1.7fr) minmax(280px, 1fr);
 }
 
 .featured__left{
@@ -351,30 +457,53 @@ img{ display:block; max-width:100%; }
   margin-bottom: 10px;
 }
 
+/* ----------------------------------------------------------------------------
+   Responsive media area (MOST IMPORTANT FOR "PROPORTION")
+   - aspect-ratio locks the height relative to width.
+   - min-height via clamp() prevents the banner from becoming too short on phones
+     or too tall on huge screens.
+   - The image is set to width/height: 100% with object-fit: cover to avoid
+     distortion while still filling the frame.
+   ---------------------------------------------------------------------------- */
+
 .featured__media{
   position: relative;
   border-radius: var(--radius2);
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.03);
-  min-height: 260px;
+
+  /* Banner aspect ratio:
+     21/9 is a cinematic wide banner look.
+     You can change it to 16/7 or 16/9 if you want less aggressive cropping. */
+  aspect-ratio: 21 / 9;
+
+  /* Height guardrails:
+     - minimum: 180px
+     - preferred: 26vw (based on viewport width)
+     - maximum: 340px */
+  min-height: clamp(180px, 26vw, 340px);
 }
 
 .featured__img{
   width: 100%;
-  height: 320px;
+  height: 100%;
   object-fit: cover;
   display: block;
-  transform: scale(1.02);
+
+  /* Avoid artificial scaling to reduce "unexpected cropping" perception. */
+  transform: none;
   filter: saturate(1.05);
 }
 
+/* Winner overlay block inside the banner.
+   It uses frosted glass and stays anchored to the bottom of the image. */
 .featured__winnerBlock{
   position: absolute;
   left: 12px;
   bottom: 12px;
   right: 12px;
-  padding: 12px 12px;
+  padding: clamp(10px, 1.2vw, 14px);
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(10, 15, 30, .45);
@@ -388,16 +517,15 @@ img{ display:block; max-width:100%; }
 
 .featured__winnerName{
   margin-top: 3px;
-  font-size: 18px;
+  font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 850;
 }
 
-.btnRow--tight{
-  margin-top: 12px;
-  padding: 0;
-}
+/* ----------------------------------------------------------------------------
+   Overview panel (right side)
+   - Column layout with title + text + hint
+   ---------------------------------------------------------------------------- */
 
-/* Overview panel (right side) */
 .featured__right{
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.05);
@@ -422,6 +550,8 @@ img{ display:block; max-width:100%; }
   border: 1px dashed rgba(255,255,255,.16);
   background: rgba(255,255,255,.03);
   padding: 12px;
+
+  /* Keep the panel visually balanced next to the banner. */
   min-height: 220px;
 }
 
@@ -431,7 +561,11 @@ img{ display:block; max-width:100%; }
   padding-top: 2px;
 }
 
-/* Carousel */
+/* ----------------------------------------------------------------------------
+   Carousel container
+   - Horizontal scrolling track with snap behavior
+   ---------------------------------------------------------------------------- */
+
 .carousel{
   border: 1px solid var(--border);
   background: rgba(255,255,255,.03);
@@ -455,9 +589,7 @@ img{ display:block; max-width:100%; }
   -webkit-overflow-scrolling: touch;
 }
 
-.carousel__track::-webkit-scrollbar{
-  height: 10px;
-}
+.carousel__track::-webkit-scrollbar{ height: 10px; }
 .carousel__track::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.14);
   border-radius: 999px;
@@ -467,16 +599,26 @@ img{ display:block; max-width:100%; }
   border-radius: 999px;
 }
 
-/* Chip item (award in carousel) */
+/* ----------------------------------------------------------------------------
+   Carousel chip (each award item)
+   - clamp() makes chip width responsive:
+     It grows on wide screens, shrinks on narrow screens, within limits.
+   - "is-active" highlights the selected award.
+   ---------------------------------------------------------------------------- */
+
 .awardChip{
   scroll-snap-align: center;
-
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.05);
   color: var(--text);
   border-radius: 18px;
   padding: 10px;
-  min-width: 280px;
+
+  /* Responsive card width:
+     - minimum: 210px
+     - preferred: 28vw (viewport-based)
+     - maximum: 320px */
+  min-width: clamp(210px, 28vw, 320px);
 
   display: grid;
   grid-template-columns: 54px 1fr;
@@ -513,9 +655,7 @@ img{ display:block; max-width:100%; }
   object-fit: cover;
 }
 
-.awardChip__text{
-  text-align: left;
-}
+.awardChip__text{ text-align: left; }
 
 .awardChip__award{
   font-weight: 850;
@@ -530,15 +670,21 @@ img{ display:block; max-width:100%; }
   line-height: 1.25;
 }
 
-/* Responsive */
+/* ----------------------------------------------------------------------------
+   Responsive breakpoint
+   - At <= 900px, make featured layout single-column.
+   - Also relax the banner ratio slightly to avoid being too short on phones.
+   ---------------------------------------------------------------------------- */
+
 @media (max-width: 900px){
   .featured{
     grid-template-columns: 1fr;
   }
-  .featured__img{
-    height: 260px;
-  }
-  .awardChip{
-    min-width: 240px;
+
+  /* Optional: a slightly less wide ratio for smaller screens
+     so the banner has more vertical presence. */
+  .featured__media{
+    aspect-ratio: 16 / 9;
+    min-height: clamp(200px, 45vw, 360px);
   }
 }
