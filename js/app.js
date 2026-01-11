@@ -20,20 +20,10 @@ function escapeHtml(s) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
-
 function buildGameImageUrl(year, gameName) {
-  if (!year || !gameName) return "/img/placeholder.png";
-
-  const fileName = gameName
-    .toLowerCase()
-    .trim()
-    .replace(/®|™/g, "")          // 去掉商标符号
-    .replace(/[:]/g, "")          // 去掉冒号
-    .replace(/&/g, "and")
-    .replace(/\s+/g, "_")         // 空格 → _
-    .replace(/[^\w_]/g, "");      // 去掉其它非法字符
-
-  return `/img/${year}/${fileName}.jpg`;
+  const slug = slugifyGameName(gameName);
+  if (!year || !slug) return "/img/placeholder.png";
+  return `/img/${year}/${slug}.webp`;
 }
 
 function normalizePath(p) {
@@ -137,9 +127,16 @@ function imgWithFallback(url) {
          src="${safe}"
          alt=""
          loading="lazy"
-         onerror="this.onerror=null;this.src='/img/placeholder.png';" />
+         onerror="
+           const src=this.src;
+           const tried=this.dataset.tried||'';
+           if(!tried){ this.dataset.tried='jpg'; this.src=src.replace(/\\.webp($|\\?)/i,'.jpg$1'); return; }
+           if(tried==='jpg'){ this.dataset.tried='png'; this.src=src.replace(/\\.jpg($|\\?)/i,'.png$1'); return; }
+           this.onerror=null; this.src='/img/placeholder.png';
+         " />
   `;
 }
+
 
 /** ---- Navigation (History) ---- **/
 function navigate(to) {
