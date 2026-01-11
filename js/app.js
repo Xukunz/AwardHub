@@ -12,9 +12,16 @@
  * - Use absolute paths (/steamawards/..., /img/...) to avoid path issues under nested routes.
  */
 
-const APP = document.getElementById("app");
-const YEAR_NOW = document.getElementById("yearNow");
-if (YEAR_NOW) YEAR_NOW.textContent = String(new Date().getFullYear());
+function getAppEl() {
+  const el = document.getElementById("app");
+  if (!el) throw new Error('Missing #app element in index.html');
+  return el;
+}
+
+function syncYearNow() {
+  const YEAR_NOW = document.getElementById("yearNow");
+  if (YEAR_NOW) YEAR_NOW.textContent = String(new Date().getFullYear());
+}
 
 /**
  * Google Sheet JSON API endpoint (Apps Script Web App).
@@ -171,14 +178,14 @@ function parsePathRoute() {
  * Render a temporary loading state.
  */
 function setLoading() {
-  APP.innerHTML = `<div class="notice">Loading…</div>`;
+  getAppEl().innerHTML = `<div class="notice">Loading…</div>`;
 }
 
 /**
  * Render an error message in the main app container.
  */
 function setError(msg) {
-  APP.innerHTML = `<div class="notice">❌ ${escapeHtml(msg)}</div>`;
+  getAppEl().innerHTML = `<div class="notice">❌ ${escapeHtml(msg)}</div>`;
 }
 
 /**
@@ -342,7 +349,7 @@ async function renderHome() {
       })
       .join("");
 
-    APP.innerHTML = `
+    getAppEl().innerHTML = `
       <div class="hero">
         <h1 class="hero__title">AwardHub</h1>
         <p class="hero__desc">
@@ -352,7 +359,6 @@ async function renderHome() {
         <div class="grid grid--years">
           ${yearsHtml}
         </div>
-
     `;
   } catch (e) {
     setError(e.message || String(e));
@@ -526,7 +532,7 @@ async function renderYearPage(year) {
     const data = await fetchYearData(year);
     const allAwards = Array.isArray(data.awards) ? data.awards : [];
     if (allAwards.length === 0) {
-      APP.innerHTML =
+      getAppEl().innerHTML =
         renderYearHeader(year, 0, data.source) +
         `<div class="notice">No awards found for ${escapeHtml(year)}.</div>`;
       return;
@@ -554,7 +560,7 @@ async function renderYearPage(year) {
       const featured = renderFeaturedAward(selectedAward, year);
       const carousel = renderAwardCarousel(filteredAwards, selectedFilteredIndex);
 
-      APP.innerHTML = `
+     getAppEl().innerHTML = `
         ${header}
         <div class="yearLayout">
           ${featured}
@@ -574,7 +580,7 @@ async function renderYearPage(year) {
 
           // If nothing matches, show a simple notice (keep the year header visible).
           if (filteredAwards.length === 0) {
-            APP.innerHTML =
+            getAppEl().innerHTML =
               header +
               `<div class="notice">No matches. Try a different keyword.</div>`;
             return;
@@ -669,6 +675,7 @@ async function renderYearPage(year) {
  */
 
 async function route() {
+  syncYearNow();
   const parts = parsePathRoute();
 
   if (parts.length === 0) {
@@ -692,7 +699,7 @@ async function route() {
     return;
   }
 
-  APP.innerHTML = `
+  getAppEl().innerHTML = `
     <div class="hero">
       <h1 class="hero__title">404</h1>
       <p class="hero__desc">The page you’re looking for doesn’t exist.</p>
