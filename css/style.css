@@ -311,3 +311,234 @@ img{ display:block; max-width:100%; }
   font-size: 12px;
 }
 .footer__dot{ opacity: .6; }
+
+/* ---------------------------
+   Year page: "Featured + Overview + Carousel" layout (based on mock)
+   --------------------------- */
+
+.yearLayout{
+  margin-top: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+/* Featured block */
+.featured{
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  border-radius: var(--radius2);
+  padding: 16px;
+  box-shadow: var(--shadow);
+
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 14px;
+}
+
+.featured__left{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  border-radius: var(--radius2);
+  padding: 14px;
+  overflow: hidden;
+}
+
+.featured__awardName{
+  font-size: 16px;
+  font-weight: 850;
+  letter-spacing: .2px;
+  color: rgba(255,255,255,.92);
+  margin-bottom: 10px;
+}
+
+.featured__media{
+  position: relative;
+  border-radius: var(--radius2);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  min-height: 260px;
+}
+
+.featured__img{
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  filter: saturate(1.05);
+}
+
+.featured__winnerBlock{
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  right: 12px;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(10, 15, 30, .45);
+  backdrop-filter: blur(10px);
+}
+
+.featured__label{
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.featured__winnerName{
+  margin-top: 3px;
+  font-size: 18px;
+  font-weight: 850;
+}
+
+.btnRow--tight{
+  margin-top: 12px;
+  padding: 0;
+}
+
+/* Overview panel (right side) */
+.featured__right{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.05);
+  border-radius: var(--radius2);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.featured__rightTitle{
+  font-size: 14px;
+  font-weight: 850;
+  color: rgba(255,255,255,.9);
+}
+
+.featured__rightText{
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  border-radius: 14px;
+  border: 1px dashed rgba(255,255,255,.16);
+  background: rgba(255,255,255,.03);
+  padding: 12px;
+  min-height: 220px;
+}
+
+.featured__hint{
+  font-size: 12px;
+  color: var(--muted2);
+  padding-top: 2px;
+}
+
+/* Carousel */
+.carousel{
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  border-radius: var(--radius2);
+  padding: 14px;
+}
+
+.carousel__title{
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .25px;
+}
+
+.carousel__track{
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel__track::-webkit-scrollbar{
+  height: 10px;
+}
+.carousel__track::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.14);
+  border-radius: 999px;
+}
+.carousel__track::-webkit-scrollbar-track{
+  background: rgba(255,255,255,.05);
+  border-radius: 999px;
+}
+
+/* Chip item (award in carousel) */
+.awardChip{
+  scroll-snap-align: center;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  border-radius: 18px;
+  padding: 10px;
+  min-width: 280px;
+
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 10px;
+  align-items: center;
+
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+
+.awardChip:hover{
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.08);
+}
+
+.awardChip.is-active{
+  border-color: rgba(242,193,78,.45);
+  box-shadow: 0 14px 30px rgba(0,0,0,.28);
+  background: rgba(242,193,78,.07);
+}
+
+.awardChip__imgWrap{
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.04);
+}
+
+.awardChip__img{
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+}
+
+.awardChip__text{
+  text-align: left;
+}
+
+.awardChip__award{
+  font-weight: 850;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.awardChip__winner{
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+/* Responsive */
+@media (max-width: 900px){
+  .featured{
+    grid-template-columns: 1fr;
+  }
+  .featured__img{
+    height: 260px;
+  }
+  .awardChip{
+    min-width: 240px;
+  }
+}

@@ -57,11 +57,10 @@ function escapeHtml(s) {
 /**
  * Convert a game name into a filename-friendly slug that matches your repo naming rules.
  *
- * Repo naming convention (based on your screenshots):
+ * Repo naming convention:
  * - lowercase
  * - words separated by underscore
  * - special symbols removed
- * - IMPORTANT: "'s" becomes "_s" (e.g., Assassin's -> assassin_s)
  *
  * Examples:
  * - "Assassin's Creed® Odyssey" -> "assassin_s_creed_odyssey"
@@ -97,15 +96,10 @@ function slugifyGameName(name) {
     .replace(/^_+|_+$/g, "");
 }
 
-
 /**
  * Build an icon URL from year + game name.
  * The primary format is WebP:
  *   /img/<year>/<slug>.webp
- *
- * Notes:
- * - Use absolute path to avoid nested route path issues.
- * - If slug or year is missing, return placeholder.
  */
 function buildGameImageUrl(year, gameName) {
   const slug = slugifyGameName(gameName);
@@ -140,7 +134,6 @@ function parsePathRoute() {
 
 /**
  * Render a temporary loading state.
- * Called before async work like fetching data.
  */
 function setLoading() {
   APP.innerHTML = `<div class="notice">Loading…</div>`;
@@ -148,7 +141,6 @@ function setLoading() {
 
 /**
  * Render an error message in the main app container.
- * Escapes content to avoid HTML injection.
  */
 function setError(msg) {
   APP.innerHTML = `<div class="notice">❌ ${escapeHtml(msg)}</div>`;
@@ -156,8 +148,6 @@ function setError(msg) {
 
 /**
  * Fetch all rows from the Sheet API (cached).
- * - Uses "no-store" to avoid browser caching stale responses.
- * - Validates the API response.
  */
 async function fetchSheetRows() {
   if (_sheetCache) return _sheetCache;
@@ -177,7 +167,6 @@ async function fetchSheetRows() {
 
 /**
  * Extract and sort all available years found in the sheet.
- * The UI uses these to render year cards on the home page.
  */
 function getAvailableYearsFromRows(rows) {
   const years = new Set();
@@ -190,19 +179,6 @@ function getAvailableYearsFromRows(rows) {
 
 /**
  * Convert flat sheet rows into the structure used by the UI.
- * - Filter only rows of the requested year.
- * - Each row becomes an "award" section with a winner card.
- * - icon_url is derived from (year, winnerName).
- *
- * Data output shape:
- * {
- *   year: 2018,
- *   source: "...",
- *   awards: [
- *     { award_id, award_name, winner: { game_name, icon_url, ... }, nominees: [] },
- *     ...
- *   ]
- * }
  */
 function buildYearDataFromRows(year, rows) {
   const awards = rows
@@ -212,7 +188,6 @@ function buildYearDataFromRows(year, rows) {
       const winnerName = String(r.Winner || "").trim() || "Unknown Game";
 
       return {
-        // award_id is used as a stable DOM attribute for sections
         award_id: awardName
           .toLowerCase()
           .replace(/\s+/g, "_")
@@ -222,26 +197,18 @@ function buildYearDataFromRows(year, rows) {
 
         winner: {
           game_name: winnerName,
-
-          // Primary icon path is webp based on repo naming convention
           icon_url: buildGameImageUrl(year, winnerName),
 
-          // Reserved for future use (blogger post URL)
+          // Reserved: external links (you'll fill these later)
           blogger_url: "",
-
-          // Reserved for future use (steam store URL)
           steam_url: ""
         },
 
-        // Nominees currently not displayed; keep for possible future
         nominees: []
       };
     });
 
-  /**
-   * De-duplicate in case the sheet contains duplicate award entries:
-   * - We use year + award_name + winner_name as the key.
-   */
+  // De-duplicate in case the sheet contains duplicate award entries
   const seen = new Set();
   const deduped = [];
   for (const a of awards) {
@@ -259,9 +226,7 @@ function buildYearDataFromRows(year, rows) {
 }
 
 /**
- * Fetch a single year's data.
- * Currently this is computed from the full sheet rows.
- * (If your dataset becomes huge, you can optimize by fetching only a year subset.)
+ * Fetch a single year's data (computed from full sheet rows).
  */
 async function fetchYearData(year) {
   const rows = await fetchSheetRows();
@@ -270,19 +235,15 @@ async function fetchYearData(year) {
 
 /**
  * Render an <img> tag with progressive fallbacks:
- * - Try the provided src (usually .webp)
- * - If fails: try .jpg
- * - If fails: try .png
- * - If fails: use placeholder
- *
- * Why:
- * - During migration to WebP, some images might still exist only as jpg/png.
- * - This avoids broken icons even if the repo isn't fully converted yet.
+ * - Try src (.webp)
+ * - Then .jpg
+ * - Then .png
+ * - Then placeholder
  */
-function imgWithFallback(url) {
+function imgWithFallback(url, className = "gameCard__img") {
   const safe = escapeHtml(url || "/img/placeholder.png");
   return `
-    <img class="gameCard__img"
+    <img class="${escapeHtml(className)}"
          src="${safe}"
          alt=""
          loading="lazy"
@@ -310,21 +271,12 @@ function imgWithFallback(url) {
  *  ---------------------------
  */
 
-/**
- * Navigate to a new internal route using History API without full page reload.
- * - Ensures normalized trailing slash for consistency.
- * - Calls route() to render the new view.
- */
 function navigate(to) {
   const url = normalizePath(to) + "/";
   history.pushState({}, "", url);
   route();
 }
 
-/**
- * Replace current URL (no new history entry).
- * Useful for default redirects (e.g., "/" -> "/steamawards/").
- */
 function replace(to) {
   const url = normalizePath(to) + "/";
   history.replaceState({}, "", url);
@@ -335,12 +287,6 @@ function replace(to) {
  *  ---------------------------
  */
 
-/**
- * Render the home page:
- * - Loads sheet rows (cached).
- * - Builds a list of available years.
- * - Renders year cards that link to /steamawards/<year>/
- */
 async function renderHome() {
   setLoading();
   try {
@@ -349,7 +295,6 @@ async function renderHome() {
 
     const yearsHtml = years
       .map((y) => {
-        // Use absolute path so it works under nested routes and history mode
         return `
           <a class="card yearCard" href="/steamawards/${y}/" aria-label="Steam Awards ${y}">
             <div>
@@ -384,8 +329,7 @@ async function renderHome() {
 }
 
 /**
- * Render the top header area for a year page.
- * Includes search input and back link.
+ * Render the header area for a year page.
  */
 function renderYearHeader(year, awardCount, source) {
   return `
@@ -396,7 +340,7 @@ function renderYearHeader(year, awardCount, source) {
       </p>
 
       <div class="toolbar">
-        <input id="searchBox" class="input" placeholder="Search by game name (live filter)" />
+        <input id="searchBox" class="input" placeholder="Search by award / winner (live filter)" />
         <span class="badge">Year: ${year}</span>
         <a class="badge" href="/steamawards/">Back</a>
       </div>
@@ -405,140 +349,273 @@ function renderYearHeader(year, awardCount, source) {
 }
 
 /**
- * Render one award section (title + winner card).
- * Nominees are intentionally omitted in the UI.
+ * Build a nicer "overview" block.
+ * Note: current sheet does not provide description, so we use a structured placeholder.
  */
-function renderAwardSection(award) {
-  const awardName = escapeHtml(award.award_name || award.award_id || "Unknown Award");
-  const winner = award.winner;
+function buildAwardOverviewText(award) {
+  const awardName = String(award?.award_name || "").trim();
+  const winnerName = String(award?.winner?.game_name || "").trim();
 
-  const winnerCard = winner
-    ? renderGameCard(winner, true)
-    : `<div class="notice">No winner data for this award yet.</div>`;
+  // Placeholder text that still looks intentional.
+  // Later you can replace it with real per-award descriptions from another dataset.
+  return `
+${awardName ? `“${awardName}”` : "This award"} is showcased here with the winner and quick links.
+We currently only have: Winner + icon + external URLs (Steam / Post).
+Winner: ${winnerName || "Unknown"}.
+`;
+}
+
+/**
+ * External links buttons (reserved, can be empty and disabled).
+ * You asked for 2 buttons that can link out: done.
+ */
+function renderExternalButtons(winner) {
+  const postUrl = winner?.blogger_url || "";
+  const steamUrl = winner?.steam_url || "";
+
+  const postBtn = postUrl
+    ? `<a class="btn btn--primary" href="${escapeHtml(postUrl)}" target="_blank" rel="noopener">Read Post</a>`
+    : `<span class="btn btn--primary btn--disabled" title="blogger_url is missing">Post</span>`;
+
+  const steamBtn = steamUrl
+    ? `<a class="btn" href="${escapeHtml(steamUrl)}" target="_blank" rel="noopener">View on Steam</a>`
+    : `<span class="btn btn--disabled" title="steam_url is missing">Steam</span>`;
+
+  return `<div class="btnRow btnRow--tight">${postBtn}${steamBtn}</div>`;
+}
+
+/**
+ * Featured (big) panel for the selected award (structure based on your mock).
+ */
+function renderFeaturedAward(award, year) {
+  const awardName = escapeHtml(award?.award_name || "Unknown Award");
+  const winnerName = escapeHtml(award?.winner?.game_name || "Unknown Game");
+  const icon = award?.winner?.icon_url || "/img/placeholder.png";
+  const overview = escapeHtml(buildAwardOverviewText(award)).replaceAll("\n", "<br/>");
 
   return `
-    <section class="section" data-award-id="${escapeHtml(award.award_id || "")}">
-      <div class="section__head">
-        <div>
-          <h2 class="section__title">${awardName}</h2>
-          <div class="section__sub">Winner</div>
+    <section class="featured">
+      <div class="featured__left">
+        <div class="featured__awardName">${awardName}</div>
+
+        <div class="featured__media">
+          ${imgWithFallback(icon, "featured__img")}
+          <div class="featured__winnerBlock">
+            <div class="featured__label">Winner</div>
+            <div class="featured__winnerName">${winnerName}</div>
+          </div>
         </div>
+
+        ${renderExternalButtons(award?.winner)}
       </div>
 
-      <div class="gameGrid">
-        ${winnerCard}
+      <aside class="featured__right">
+        <div class="featured__rightTitle">概述</div>
+        <div class="featured__rightText">${overview}</div>
+
+        <div class="featured__hint">
+          Tip: 点击下方滚动条切换奖项；搜索会过滤奖项/赢家。
+        </div>
+      </aside>
+    </section>
+  `;
+}
+
+/**
+ * Bottom horizontal carousel (award strip).
+ * Clicking a chip selects the award and updates the featured panel.
+ */
+function renderAwardCarousel(awards, selectedIndex) {
+  const items = awards
+    .map((a, idx) => {
+      const isActive = idx === selectedIndex;
+      const awardName = escapeHtml(a.award_name || "Award");
+      const winnerName = escapeHtml(a?.winner?.game_name || "Unknown");
+      const icon = a?.winner?.icon_url || "/img/placeholder.png";
+      const key = escapeHtml(a.award_id || String(idx));
+
+      return `
+        <button class="awardChip ${isActive ? "is-active" : ""}"
+                type="button"
+                data-award-idx="${idx}"
+                data-award-key="${key}"
+                aria-label="${awardName}">
+          <div class="awardChip__imgWrap">
+            ${imgWithFallback(icon, "awardChip__img")}
+          </div>
+          <div class="awardChip__text">
+            <div class="awardChip__award">${awardName}</div>
+            <div class="awardChip__winner">${winnerName}</div>
+          </div>
+        </button>
+      `;
+    })
+    .join("");
+
+  return `
+    <section class="carousel">
+      <div class="carousel__title">Awards</div>
+      <div class="carousel__track" id="awardCarousel">
+        ${items}
       </div>
     </section>
   `;
 }
 
 /**
- * Render one game card.
- * - Uses data-game-name for client-side search filtering.
- * - Uses imgWithFallback() for progressive image fallback.
+ * Apply live filtering to awards (award name or winner name).
+ * Returns { filteredAwards, indexMap } where indexMap maps filtered index -> original index.
  */
-function renderGameCard(game, isWinner) {
-  const name = escapeHtml(game.game_name || "Unknown Game");
-  const icon = game.icon_url || "/img/placeholder.png";
-  const blogger = game.blogger_url || "";
-  const steam = game.steam_url || "";
+function filterAwards(allAwards, keyword) {
+  const k = keyword.trim().toLowerCase();
+  if (!k) {
+    return { filteredAwards: allAwards, indexMap: allAwards.map((_, i) => i) };
+  }
 
-  const bloggerBtn = blogger
-    ? `<a class="btn btn--primary" href="${escapeHtml(blogger)}" target="_blank" rel="noopener">Read Post</a>`
-    : `<span class="btn btn--primary btn--disabled" title="blogger_url is missing">Post not published</span>`;
-
-  const steamBtn = steam
-    ? `<a class="btn" href="${escapeHtml(steam)}" target="_blank" rel="noopener">Steam</a>`
-    : `<span class="btn btn--disabled" title="steam_url is missing">Steam</span>`;
-
-  return `
-    <article class="gameCard" data-game-name="${name.toLowerCase()}">
-      ${isWinner ? `<div class="ribbon">WINNER</div>` : ""}
-      <div class="gameCard__inner">
-        ${imgWithFallback(icon)}
-        <div>
-          <p class="gameCard__name">${name}</p>
-          <div class="gameCard__meta">${isWinner ? "Winner" : "Nominee"}</div>
-        </div>
-      </div>
-      <div class="btnRow">
-        ${bloggerBtn}
-        ${steamBtn}
-      </div>
-    </article>
-  `;
+  const filtered = [];
+  const map = [];
+  allAwards.forEach((a, i) => {
+    const award = String(a?.award_name || "").toLowerCase();
+    const winner = String(a?.winner?.game_name || "").toLowerCase();
+    if (award.includes(k) || winner.includes(k)) {
+      filtered.push(a);
+      map.push(i);
+    }
+  });
+  return { filteredAwards: filtered, indexMap: map };
 }
 
 /**
- * Apply live search filtering to all game cards on the current page.
- * - This is a client-side filter; no network calls.
- * - It matches case-insensitively against the rendered game name.
+ * Year page render (new layout based on your mock).
  */
-function applySearchFilter(keyword) {
-  const k = keyword.trim().toLowerCase();
-  const cards = APP.querySelectorAll(".gameCard");
-  cards.forEach((card) => {
-    const gameName = card.getAttribute("data-game-name") || "";
-    card.style.display = gameName.includes(k) ? "" : "none";
-  });
+async function renderYearPage(year) {
+  setLoading();
+  try {
+    const data = await fetchYearData(year);
+    const allAwards = Array.isArray(data.awards) ? data.awards : [];
+    if (allAwards.length === 0) {
+      APP.innerHTML =
+        renderYearHeader(year, 0, data.source) +
+        `<div class="notice">No awards found for ${escapeHtml(year)}.</div>`;
+      return;
+    }
+
+    // State (kept inside closure)
+    let selectedOriginalIndex = 0;
+    let indexMap = allAwards.map((_, i) => i);
+    let filteredAwards = allAwards;
+
+    function render() {
+      const header = renderYearHeader(year, allAwards.length, data.source);
+
+      // Translate selected original index -> filtered index
+      let selectedFilteredIndex = indexMap.indexOf(selectedOriginalIndex);
+      if (selectedFilteredIndex < 0) selectedFilteredIndex = 0;
+
+      const selectedAward = filteredAwards[selectedFilteredIndex] || filteredAwards[0];
+      const featured = renderFeaturedAward(selectedAward, year);
+      const carousel = renderAwardCarousel(filteredAwards, selectedFilteredIndex);
+
+      APP.innerHTML = `
+        ${header}
+        <div class="yearLayout">
+          ${featured}
+          ${carousel}
+        </div>
+      `;
+
+      // Wire search
+      const searchBox = document.getElementById("searchBox");
+      if (searchBox) {
+        searchBox.value = _lastSearchKeyword;
+        searchBox.addEventListener("input", (e) => {
+          _lastSearchKeyword = String(e.target.value || "");
+          const out = filterAwards(allAwards, _lastSearchKeyword);
+          filteredAwards = out.filteredAwards;
+          indexMap = out.indexMap;
+
+          // Ensure selection remains valid after filtering
+          if (filteredAwards.length === 0) {
+            APP.innerHTML =
+              header +
+              `<div class="notice">No matches. Try a different keyword.</div>`;
+            return;
+          }
+          if (!indexMap.includes(selectedOriginalIndex)) {
+            selectedOriginalIndex = indexMap[0];
+          }
+          render();
+          // Keep focus in input after rerender
+          const newBox = document.getElementById("searchBox");
+          if (newBox) newBox.focus();
+        });
+      }
+
+      // Wire carousel clicks
+      const track = document.getElementById("awardCarousel");
+      if (track) {
+        track.addEventListener("click", (e) => {
+          const btn = e.target.closest(".awardChip");
+          if (!btn) return;
+          const idx = Number(btn.getAttribute("data-award-idx"));
+          if (!Number.isFinite(idx)) return;
+
+          // idx is filtered index -> map back to original index
+          const original = indexMap[idx];
+          if (!Number.isFinite(original)) return;
+
+          selectedOriginalIndex = original;
+          render();
+
+          // After rerender, scroll active chip into view
+          const newTrack = document.getElementById("awardCarousel");
+          const active = newTrack?.querySelector(".awardChip.is-active");
+          active?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        });
+      }
+
+      // Auto scroll active into view on first render
+      const active = APP.querySelector(".awardChip.is-active");
+      active?.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+    }
+
+    // Persist search keyword between rerenders within the page
+    let _lastSearchKeyword = "";
+    render();
+  } catch (e) {
+    setError(e.message || String(e));
+  }
 }
 
 /** ---------------------------
  *  Router
  *  ---------------------------
- *
- * Supported routes:
- * - /steamawards/           -> home (list years)
- * - /steamawards/<year>/    -> year details
- *
- * Default:
- * - "/" auto-replaces to "/steamawards/"
  */
+
 async function route() {
   const parts = parsePathRoute();
 
-  // Root path: redirect to /steamawards/ (History replace to avoid extra history entry)
   if (parts.length === 0) {
     replace("/steamawards");
     return;
   }
 
-  // /steamawards or /steamawards/<year>
   if (parts[0] === "steamawards") {
-    // /steamawards/ -> list years
     if (parts.length === 1) {
       await renderHome();
       return;
     }
 
-    // /steamawards/<year>/
     const year = Number(parts[1]);
     if (!year || !Number.isFinite(year)) {
       setError('Invalid year. Example: "/steamawards/2024/"');
       return;
     }
 
-    setLoading();
-    try {
-      const data = await fetchYearData(year);
-      const awards = Array.isArray(data.awards) ? data.awards : [];
-      const header = renderYearHeader(year, awards.length, data.source);
-      const body = awards.map(renderAwardSection).join("");
-
-      APP.innerHTML = header + body;
-
-      // Wire up live search input
-      const searchBox = document.getElementById("searchBox");
-      if (searchBox) {
-        searchBox.addEventListener("input", (e) => applySearchFilter(e.target.value));
-      }
-    } catch (e) {
-      setError(e.message || String(e));
-    }
+    await renderYearPage(year);
     return;
   }
 
-  // Unknown route -> show a simple 404 view (client-side)
   APP.innerHTML = `
     <div class="hero">
       <h1 class="hero__title">404</h1>
@@ -553,13 +630,8 @@ async function route() {
 /** ---------------------------
  *  Link interception (internal SPA navigation)
  *  ---------------------------
- *
- * We intercept clicks on internal <a href="/..."> links to avoid full page reload.
- * - External URLs (http/https) are NOT intercepted.
- * - mailto/tel are NOT intercepted.
- * - hash-only links are NOT intercepted.
- * - Only absolute internal paths (starting with "/") are intercepted.
  */
+
 document.addEventListener("click", (e) => {
   const a = e.target.closest("a");
   if (!a) return;
@@ -567,29 +639,14 @@ document.addEventListener("click", (e) => {
   const href = a.getAttribute("href");
   if (!href) return;
 
-  // Do not intercept external links
   if (href.startsWith("http://") || href.startsWith("https://")) return;
-
-  // Do not intercept special schemes
   if (href.startsWith("mailto:") || href.startsWith("tel:")) return;
-
-  // Do not intercept hash-only anchors
   if (href.startsWith("#")) return;
-
-  // Intercept only internal absolute paths
   if (!href.startsWith("/")) return;
 
   e.preventDefault();
   navigate(href);
 });
 
-/**
- * Handle browser back/forward buttons.
- * popstate fires when the active history entry changes.
- */
 window.addEventListener("popstate", route);
-
-/**
- * Initial render when the document is ready.
- */
 window.addEventListener("DOMContentLoaded", route);
