@@ -502,6 +502,7 @@ async function renderYearPage(year) {
 
     // State (kept inside closure)
     let selectedOriginalIndex = 0;
+    let carouselScrollLeft = 0; // Persist horizontal scroll position across rerenders
     let indexMap = allAwards.map((_, i) => i);
     let filteredAwards = allAwards;
 
@@ -552,27 +553,56 @@ async function renderYearPage(year) {
       }
 
       // Wire carousel clicks
-      const track = document.getElementById("awardCarousel");
-      if (track) {
-        track.addEventListener("click", (e) => {
-          const btn = e.target.closest(".awardChip");
-          if (!btn) return;
-          const idx = Number(btn.getAttribute("data-award-idx"));
-          if (!Number.isFinite(idx)) return;
+ const track = document.getElementById("awardCarousel");
+if (track) {
+  // Restore previous scroll position after rerender to prevent "reset to start".
+  track.scrollLeft = carouselScrollLeft;
 
-          // idx is filtered index -> map back to original index
-          const original = indexMap[idx];
-          if (!Number.isFinite(original)) return;
+  // Keep scroll position in sync while user drags the scrollbar.
+  track.addEventListener("scroll", () => {
+    carouselScrollLeft = track.scrollLeft;
+  }, { passive: true });
 
-          selectedOriginalIndex = original;
-          render();
+  track.addEventListener("click", (e) => {
+    const btn = e.target.closest(".awardChip");
+    if (!btn) return;
 
-          // After rerender, scroll active chip into view
-          const newTrack = document.getElementById("awardCarousel");
-          const active = newTrack?.querySelector(".awardChip.is-active");
-          active?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-        });
-      }
+    const idx = Number(btn.getAttribute("data-award-idx"));
+    if (!Number.isFinite(idx)) return;
+
+    // idx is filtered index -> map back to original index
+    const original = indexMap[idx];
+    if (!Number.isFinite(original)) return;
+
+    // Update selection and rerender (this will recreate DOM)
+    selectedOriginalIndex = original;
+
+    // Before rerendering, capture current scroll position.
+    carouselScrollLeft = track.scrollLeft;
+
+    render();
+
+    // After rerender, scroll the active chip into view WITHOUT starting from 0.
+    const newTrack = document.getElementById("awardCarousel");
+    const active = newTrack?.querySelector(".awardChip.is-active");
+    if (!newTrack || !active) return;
+
+    // Ensure the track keeps the old scrollLeft first (critical).
+    newTrack.scrollLeft = carouselScrollLeft;
+
+    // Then do a targeted horizontal scroll to center the active item.
+    // This avoids page-level scrolling side effects of scrollIntoView().
+    requestAnimationFrame(() => {
+      const targetLeft =
+        active.offsetLeft - (newTrack.clientWidth - active.clientWidth) / 2;
+
+      newTrack.scrollTo({
+        left: Math.max(0, targetLeft),
+        behavior: "smooth"
+      });
+    });
+  });
+}
 
       // Auto scroll active into view on first render
       const active = APP.querySelector(".awardChip.is-active");
