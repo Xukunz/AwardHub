@@ -21,6 +21,21 @@ function escapeHtml(s) {
     .replaceAll("'", "&#39;");
 }
 
+function buildGameImageUrl(year, gameName) {
+  if (!year || !gameName) return "/img/placeholder.png";
+
+  const fileName = gameName
+    .toLowerCase()
+    .trim()
+    .replace(/®|™/g, "")          // 去掉商标符号
+    .replace(/[:]/g, "")          // 去掉冒号
+    .replace(/&/g, "and")
+    .replace(/\s+/g, "_")         // 空格 → _
+    .replace(/[^\w_]/g, "");      // 去掉其它非法字符
+
+  return `/img/${year}/${fileName}.jpg`;
+}
+
 function normalizePath(p) {
   // 统一：保证以 / 开头，去掉多余的末尾 /
   if (!p) return "/";
@@ -85,7 +100,7 @@ function buildYearDataFromRows(year, rows) {
         award_name: awardName,
         winner: {
           game_name: winnerName,
-          icon_url: "/img/placeholder.png", // 绝对路径更稳
+          icon_url: buildGameImageUrl(year, winnerName),
           blogger_url: "",
           steam_url: ""
         },
