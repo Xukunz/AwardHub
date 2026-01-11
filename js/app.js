@@ -353,10 +353,6 @@ async function renderHome() {
           ${yearsHtml}
         </div>
 
-        <div class="notice">
-          Data source: Google Sheet → Apps Script JSON API.
-        </div>
-      </div>
     `;
   } catch (e) {
     setError(e.message || String(e));
