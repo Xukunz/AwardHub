@@ -55,6 +55,40 @@ function escapeHtml(s) {
 }
 
 /**
+ * Smart horizontal scrolling for the carousel track.
+ *
+ * Why this exists:
+ * - If you always use behavior:"smooth", clicking a far-away card makes the track
+ *   animate from start to end (looks like "replaying" a long animation).
+ * - The fix is: smooth only for short distances, jump (auto) for long distances.
+ *
+ * Design:
+ * - Centers the chip inside the track viewport.
+ * - Computes the scroll distance.
+ * - Uses "auto" when distance is large (no long animation).
+ * - Uses "smooth" when distance is small (nice micro-animation).
+ */
+function scrollChipIntoViewSmart(track, chip) {
+  if (!track || !chip) return;
+
+  // Target: center the chip in the viewport (horizontal only).
+  const targetLeft = chip.offsetLeft - (track.clientWidth - chip.clientWidth) / 2;
+  const clampedLeft = Math.max(0, targetLeft);
+
+  const currentLeft = track.scrollLeft;
+  const distance = Math.abs(clampedLeft - currentLeft);
+
+  // "Far" means almost a full screen (track viewport width).
+  // You can tune this threshold if you want more/less smooth.
+  const FAR_THRESHOLD = track.clientWidth * 0.9;
+
+  track.scrollTo({
+    left: clampedLeft,
+    behavior: distance > FAR_THRESHOLD ? "auto" : "smooth",
+  });
+}
+
+/**
  * Convert a game name into a filename-friendly slug that matches your repo naming rules.
  *
  * Repo naming convention:
@@ -356,8 +390,6 @@ function buildAwardOverviewText(award) {
   const awardName = String(award?.award_name || "").trim();
   const winnerName = String(award?.winner?.game_name || "").trim();
 
-  // Placeholder text that still looks intentional.
-  // Later you can replace it with real per-award descriptions from another dataset.
   return `
 ${awardName ? `“${awardName}”` : "This award"} is showcased here with the winner and quick links.
 We currently only have: Winner + icon + external URLs (Steam / Post).
@@ -385,12 +417,15 @@ function renderExternalButtons(winner) {
 }
 
 /**
- * Featured (big) panel for the selected award (structure based on your mock).
+ * Featured (big) panel for the selected award.
  */
 function renderFeaturedAward(award, year) {
   const awardName = escapeHtml(award?.award_name || "Unknown Award");
   const winnerName = escapeHtml(award?.winner?.game_name || "Unknown Game");
   const icon = award?.winner?.icon_url || "/img/placeholder.png";
+
+  // buildAwardOverviewText() returns text with line breaks;
+  // escapeHtml() makes it safe, then we convert "\n" to "<br/>" for display.
   const overview = escapeHtml(buildAwardOverviewText(award)).replaceAll("\n", "<br/>");
 
   return `
@@ -410,11 +445,11 @@ function renderFeaturedAward(award, year) {
       </div>
 
       <aside class="featured__right">
-        <div class="featured__rightTitle">概述</div>
+        <div class="featured__rightTitle">Overview</div>
         <div class="featured__rightText">${overview}</div>
 
         <div class="featured__hint">
-          Tip: 点击下方滚动条切换奖项；搜索会过滤奖项/赢家。
+          Tip: Click a card below to switch awards. Search filters by award name / winner.
         </div>
       </aside>
     </section>
@@ -486,7 +521,7 @@ function filterAwards(allAwards, keyword) {
 }
 
 /**
- * Year page render (new layout based on your mock).
+ * Year page render (layout based on your mock).
  */
 async function renderYearPage(year) {
   setLoading();
@@ -502,9 +537,14 @@ async function renderYearPage(year) {
 
     // State (kept inside closure)
     let selectedOriginalIndex = 0;
-    let carouselScrollLeft = 0; // Persist horizontal scroll position across rerenders
+
+    // Preserve horizontal scroll position across rerenders within this page view.
+    let carouselScrollLeft = 0;
+
+    // Filter state
     let indexMap = allAwards.map((_, i) => i);
     let filteredAwards = allAwards;
+    let _lastSearchKeyword = "";
 
     function render() {
       const header = renderYearHeader(year, allAwards.length, data.source);
@@ -525,7 +565,7 @@ async function renderYearPage(year) {
         </div>
       `;
 
-      // Wire search
+      // Wire search (live filter)
       const searchBox = document.getElementById("searchBox");
       if (searchBox) {
         searchBox.value = _lastSearchKeyword;
@@ -535,78 +575,91 @@ async function renderYearPage(year) {
           filteredAwards = out.filteredAwards;
           indexMap = out.indexMap;
 
-          // Ensure selection remains valid after filtering
+          // If nothing matches, show a simple notice (keep the year header visible).
           if (filteredAwards.length === 0) {
             APP.innerHTML =
               header +
               `<div class="notice">No matches. Try a different keyword.</div>`;
             return;
           }
+
+          // If current selection is filtered out, select the first visible item.
           if (!indexMap.includes(selectedOriginalIndex)) {
             selectedOriginalIndex = indexMap[0];
           }
+
+          // Preserve scroll position before rerendering (important).
+          const oldTrack = document.getElementById("awardCarousel");
+          if (oldTrack) carouselScrollLeft = oldTrack.scrollLeft;
+
           render();
+
           // Keep focus in input after rerender
           const newBox = document.getElementById("searchBox");
           if (newBox) newBox.focus();
         });
       }
 
-      // Wire carousel clicks
- const track = document.getElementById("awardCarousel");
-if (track) {
-  // Restore previous scroll position after rerender to prevent "reset to start".
-  track.scrollLeft = carouselScrollLeft;
+      // Wire carousel clicks + preserve scrolling
+      const track = document.getElementById("awardCarousel");
+      if (track) {
+        // Restore previous scroll position AFTER DOM mount.
+        // requestAnimationFrame helps after layout is ready.
+        requestAnimationFrame(() => {
+          track.scrollLeft = carouselScrollLeft;
+        });
 
-  // Keep scroll position in sync while user drags the scrollbar.
-  track.addEventListener("scroll", () => {
-    carouselScrollLeft = track.scrollLeft;
-  }, { passive: true });
+        // Keep scroll position updated when user drags the scrollbar.
+        track.addEventListener(
+          "scroll",
+          () => {
+            carouselScrollLeft = track.scrollLeft;
+          },
+          { passive: true }
+        );
 
-  track.addEventListener("click", (e) => {
-    const btn = e.target.closest(".awardChip");
-    if (!btn) return;
+        track.addEventListener("click", (e) => {
+          const btn = e.target.closest(".awardChip");
+          if (!btn) return;
 
-    const idx = Number(btn.getAttribute("data-award-idx"));
-    if (!Number.isFinite(idx)) return;
+          const idx = Number(btn.getAttribute("data-award-idx"));
+          if (!Number.isFinite(idx)) return;
 
-    // idx is filtered index -> map back to original index
-    const original = indexMap[idx];
-    if (!Number.isFinite(original)) return;
+          // idx is filtered index -> map back to original index
+          const original = indexMap[idx];
+          if (!Number.isFinite(original)) return;
 
-    // Update selection and rerender (this will recreate DOM)
-    selectedOriginalIndex = original;
+          // Capture current scroll position BEFORE rerender.
+          carouselScrollLeft = track.scrollLeft;
 
-    // Before rerendering, capture current scroll position.
-    carouselScrollLeft = track.scrollLeft;
+          // Update selection and rerender.
+          selectedOriginalIndex = original;
+          render();
 
-    render();
+          // After rerender, run smart scroll to the active chip.
+          // IMPORTANT:
+          // - We do NOT force "smooth" for long distance (prevents replay-like animation).
+          // - If the browser resets scrollLeft to 0 for a split second, distance becomes huge,
+          //   and smart scroll will choose "auto" (no long animation).
+          requestAnimationFrame(() => {
+            const newTrack = document.getElementById("awardCarousel");
+            if (!newTrack) return;
 
-    // After rerender, scroll the active chip into view WITHOUT starting from 0.
-    const newTrack = document.getElementById("awardCarousel");
-    const active = newTrack?.querySelector(".awardChip.is-active");
-    if (!newTrack || !active) return;
+            // Best effort restore first (no animation).
+            newTrack.scrollLeft = carouselScrollLeft;
 
-    // Ensure the track keeps the old scrollLeft first (critical).
-    newTrack.scrollLeft = carouselScrollLeft;
+            const active = newTrack.querySelector(".awardChip.is-active");
+            if (!active) return;
 
-    // Then do a targeted horizontal scroll to center the active item.
-    // This avoids page-level scrolling side effects of scrollIntoView().
-    requestAnimationFrame(() => {
-      const targetLeft =
-        active.offsetLeft - (newTrack.clientWidth - active.clientWidth) / 2;
+            scrollChipIntoViewSmart(newTrack, active);
 
-      newTrack.scrollTo({
-        left: Math.max(0, targetLeft),
-        behavior: "smooth"
-      });
-    });
-  });
-}
+            // Update cache after scroll (in case we jumped).
+            carouselScrollLeft = newTrack.scrollLeft;
+          });
+        });
+      }
     }
 
-    // Persist search keyword between rerenders within the page
-    let _lastSearchKeyword = "";
     render();
   } catch (e) {
     setError(e.message || String(e));
@@ -665,9 +718,12 @@ document.addEventListener("click", (e) => {
   const href = a.getAttribute("href");
   if (!href) return;
 
+  // External / special links should behave normally.
   if (href.startsWith("http://") || href.startsWith("https://")) return;
   if (href.startsWith("mailto:") || href.startsWith("tel:")) return;
   if (href.startsWith("#")) return;
+
+  // Only intercept absolute internal paths.
   if (!href.startsWith("/")) return;
 
   e.preventDefault();

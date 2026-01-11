@@ -434,10 +434,6 @@ img{ display:block; max-width:100%; }
   display: grid;
   gap: 14px;
 
-  /* Adaptive columns:
-     Left column prefers being wider but will not shrink below 420px.
-     Right column will not shrink below 280px.
-     If the container is too narrow, the media query below switches to 1 column. */
   grid-template-columns: minmax(420px, 1.7fr) minmax(280px, 1fr);
 }
 
@@ -459,12 +455,6 @@ img{ display:block; max-width:100%; }
 
 /* ----------------------------------------------------------------------------
    Responsive media area
-   ----------------------------------------------------------------------------
-   The featured media uses an aspect ratio box:
-   - aspect-ratio sets the height relative to width without hardcoding pixels
-   - min-height clamp prevents it from being too short on phones and too tall on
-     huge monitors
-   - object-fit: cover prevents image distortion while filling the frame
    ---------------------------------------------------------------------------- */
 
 .featured__media{
@@ -474,13 +464,7 @@ img{ display:block; max-width:100%; }
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.03);
 
-  /* If you feel it is too flat, increase height by using 16/10 or 4/3. */
   aspect-ratio: 21 / 9;
-
-  /* Height guardrails:
-     - minimum: 180px
-     - preferred: 26vw (viewport width based)
-     - maximum: 340px */
   min-height: clamp(180px, 26vw, 340px);
 }
 
@@ -489,14 +473,10 @@ img{ display:block; max-width:100%; }
   height: 100%;
   object-fit: cover;
   display: block;
-
-  /* Avoid artificial scaling; it increases perceived cropping. */
   transform: none;
   filter: saturate(1.05);
 }
 
-/* Winner overlay block inside the banner.
-   It uses frosted glass and stays anchored to the bottom of the image. */
 .featured__winnerBlock{
   position: absolute;
   left: 12px;
@@ -577,14 +557,10 @@ img{ display:block; max-width:100%; }
 /* ============================================================================
    Carousel track: fixed 4 items per view with draggable scrollbar
    ----------------------------------------------------------------------------
-   Goal:
-   - The track behaves like a structured rail, not "random free-scroll chips".
-   - Exactly 4 cards are visible per viewport on desktop.
-   Implementation:
-   - Use CSS Grid with grid-auto-flow: column to create a horizontal strip.
-   - grid-auto-columns calculates each item width as 1/4 of the track width,
-     minus gaps.
-   - overflow-x: auto enables a real draggable scrollbar (the "slider").
+   IMPORTANT:
+   - Do NOT set "scroll-behavior: smooth" here.
+   - Smooth scrolling should be controlled by JS with a "smart" strategy
+     (near distance smooth, far distance jump) to avoid long animations.
    ============================================================================ */
 
 .carousel__track{
@@ -592,69 +568,42 @@ img{ display:block; max-width:100%; }
 
   display: grid;
   grid-auto-flow: column;
-
-  /* Desktop: show exactly 4 items per view. */
   grid-auto-columns: calc((100% - 3 * 12px) / 4);
-
   gap: 12px;
 
   overflow-x: auto;
   overflow-y: hidden;
 
-  /* Extra bottom padding so the scrollbar has comfortable breathing room. */
   padding-bottom: 14px;
-
-  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
 
 /* ============================================================================
    Custom scrollbar: visible, draggable, slider-like
-   ----------------------------------------------------------------------------
-   This styling targets Chromium/WebKit browsers (Chrome/Edge/Safari).
-   It makes the scrollbar a clear "handle" users can drag.
    ============================================================================ */
 
 .carousel__track::-webkit-scrollbar{
   height: 14px;
 }
-
 .carousel__track::-webkit-scrollbar-track{
   background: rgba(255,255,255,.06);
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.08);
 }
-
 .carousel__track::-webkit-scrollbar-thumb{
-  background: linear-gradient(
-    180deg,
-    rgba(242,193,78,.9),
-    rgba(242,193,78,.6)
-  );
+  background: linear-gradient(180deg, rgba(242,193,78,.9), rgba(242,193,78,.6));
   border-radius: 999px;
   border: 3px solid rgba(0,0,0,.25);
 }
-
 .carousel__track::-webkit-scrollbar-thumb:hover{
-  background: linear-gradient(
-    180deg,
-    rgba(242,193,78,1),
-    rgba(242,193,78,.75)
-  );
+  background: linear-gradient(180deg, rgba(242,193,78,1), rgba(242,193,78,.75));
 }
 
 /* ============================================================================
    Award tile (each award item in the carousel)
-   ----------------------------------------------------------------------------
-   Notes:
-   - Width is controlled by the track's grid-auto-columns, so the card itself
-     should simply stretch to 100% (min-width: 100%).
-   - We keep the same "glass" style as the rest of the site.
-   - Hover/active effects are preserved and consistent.
    ============================================================================ */
 
 .awardChip{
-  /* Ensure each tile fills its assigned grid column width. */
   min-width: 100%;
   height: 100%;
 
@@ -672,12 +621,10 @@ img{ display:block; max-width:100%; }
   cursor: pointer;
   transition: transform .12s ease, background .12s ease, border-color .12s ease;
 }
-
 .awardChip:hover{
   transform: translateY(-2px);
   background: rgba(255,255,255,.08);
 }
-
 .awardChip.is-active{
   border-color: rgba(242,193,78,.45);
   box-shadow: 0 14px 30px rgba(0,0,0,.28);
@@ -692,7 +639,6 @@ img{ display:block; max-width:100%; }
   border: 1px solid rgba(255,255,255,.14);
   background: rgba(255,255,255,.04);
 }
-
 .awardChip__img{
   width: 54px;
   height: 54px;
@@ -700,13 +646,11 @@ img{ display:block; max-width:100%; }
 }
 
 .awardChip__text{ text-align: left; }
-
 .awardChip__award{
   font-weight: 850;
   font-size: 13px;
   line-height: 1.2;
 }
-
 .awardChip__winner{
   margin-top: 4px;
   font-size: 12px;
@@ -715,12 +659,7 @@ img{ display:block; max-width:100%; }
 }
 
 /* ============================================================================
-   Responsive layout rules
-   ----------------------------------------------------------------------------
-   The carousel "4 per view" is perfect for desktop, but too dense on small
-   screens. We reduce the number of visible tiles:
-   - <= 1024px: 3 per view (tablet)
-   - <= 640px:  2 per view (phone)
+   Responsive layout rules for carousel
    ============================================================================ */
 
 @media (max-width: 1024px){
@@ -737,9 +676,6 @@ img{ display:block; max-width:100%; }
 
 /* ----------------------------------------------------------------------------
    Featured responsive breakpoint
-   ----------------------------------------------------------------------------
-   - At <= 900px, make featured layout single-column.
-   - Also adjust banner ratio so it is not too flat on phones.
    ---------------------------------------------------------------------------- */
 
 @media (max-width: 900px){
