@@ -137,7 +137,7 @@ function slugifyGameName(name) {
     .replace(/[®™©]/g, "_")
 
     // Keep a separator for "'s"
-    .replace(/'s\b/g, "_s")
+    .replace(/'s\b/g, "s")
 
     // Remaining apostrophes also become separators
     .replace(/'/g, "_")
@@ -382,10 +382,6 @@ async function renderHome() {
         <div class="grid grid--years">
           ${yearsHtml}
         </div>
-
-        <div class="notice">
-          Data source: Google Sheet → Apps Script JSON API.
-        </div>
       </div>
     `;
   } catch (e) {
@@ -422,7 +418,6 @@ function buildAwardOverviewText(award) {
 
   return `
 ${awardName ? `“${awardName}”` : "This award"} is showcased here with the winner and quick links.
-We currently only have: Winner + icon + external URLs (Steam / Post).
 Winner: ${winnerName || "Unknown"}.
 `;
 }
@@ -440,7 +435,7 @@ function renderExternalButtons(winner) {
 
   const steamBtn = steamUrl
     ? `<a class="btn" href="${escapeHtml(steamUrl)}" target="_blank" rel="noopener">View on Steam</a>`
-    : `<span class="btn btn--disabled" title="steam_url is missing">Steam</span>`;
+    : `<span class="btn btn--disabled" title="steam_url is missing">Buy</span>`;
 
   return `<div class="btnRow btnRow--tight">${postBtn}${steamBtn}</div>`;
 }
