@@ -137,7 +137,7 @@ function slugifyGameName(name) {
     .replace(/[®™©]/g, "_")
 
     // Keep a separator for "'s"
-    .replace(/'s\b/g, "s")
+    .replace(/'s\b/g, "_s")
 
     // Remaining apostrophes also become separators
     .replace(/'/g, "_")
