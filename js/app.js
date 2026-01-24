@@ -237,26 +237,21 @@ function buildYearDataFromRows(year, rows) {
   const awards = rows
     .filter((r) => Number(r.Year) === Number(year))
     .map((r, idx) => {
-      const awardName = String(r.Title || "").trim() || `Award ${idx + 1}`;
-
-      // Prefer the new column "Merit", fallback to legacy "Winner".
-      const meritOrWinner = String((r.Merit ?? r.Winner ?? "")).trim() || "Unknown Game";
+      const gameName = String(r.Title || "").trim() || "Unknown Game";
+      const meritName = String((r.Merit ?? r.Winner ?? "")).trim() || `Award ${idx + 1}`;
 
       return {
-        award_id: awardName
+        award_id: meritName
           .toLowerCase()
           .replace(/\s+/g, "_")
           .replace(/[^\w_]/g, ""),
 
-        award_name: awardName,
+        award_name: meritName,
 
-        // Keep the internal field name "winner" to avoid refactoring all UI code.
-        // Semantically, it now represents the "Merit" value when your sheet uses Merit.
         winner: {
-          game_name: meritOrWinner,
-          icon_url: buildGameImageUrl(year, meritOrWinner),
+          game_name: gameName,
+          icon_url: buildGameImageUrl(year, gameName),
 
-          // Reserved: external links
           blogger_url: "",
           steam_url: ""
         },
@@ -265,7 +260,6 @@ function buildYearDataFromRows(year, rows) {
       };
     });
 
-  // De-duplicate defensively
   const seen = new Set();
   const deduped = [];
   for (const a of awards) {
@@ -281,6 +275,7 @@ function buildYearDataFromRows(year, rows) {
     awards: deduped
   };
 }
+
 
 /**
  * Fetch computed year data.
