@@ -4,7 +4,7 @@
  * - Static site (GitHub Pages compatible) + client-side routing (History API).
  * - Data is loaded live from Google Sheet via Apps Script JSON API.
  * - UI is rendered with vanilla JS (no framework).
- * - Game icon URLs are derived from "year + winner game name" -> slug -> file path.
+ * - Game icon URLs are derived from "year + winner/merit game name" -> slug -> file path.
  * - Image fallback: try .webp, then .jpg, then .png, finally placeholder.
  *
  * IMPORTANT:
@@ -14,6 +14,11 @@
  * Stability fixes included:
  * - Prevent "first visit blank screen" caused by redirect race with 404 fallback restore.
  * - Prevent "carousel long replay animation" when clicking far-away chips.
+ *
+ * Data schema note:
+ * - Your Google Sheet column header changed from "Winner" -> "Merit".
+ * - This file is backward compatible:
+ *   It reads Merit first, and falls back to Winner if Merit is missing.
  */
 
 /* ============================================================================
@@ -21,10 +26,10 @@
    ============================================================================ */
 
 /**
- * Always retrieve #app lazily.
+ * Lazily retrieve #app.
  * Why:
- * - On GitHub Pages fallback pages, DOM timing can vary.
- * - Throwing early helps identify incorrect HTML templates.
+ * - Guarantees the element exists at the moment we need it.
+ * - Throws early if index.html template is wrong.
  */
 function getAppEl() {
   const el = document.getElementById("app");
@@ -46,22 +51,21 @@ function syncYearNow() {
    ============================================================================ */
 
 /**
- * Redirect "/" -> "/steamawards/" ONLY when:
+ * Rewrite "/" -> "/steamawards/" ONLY when:
  * - user is truly at root, AND
  * - there is no deep-link restore pending from 404.html (sessionStorage key)
  *
  * Why:
- * - 404.html (fallback) stores the originally requested deep-link into sessionStorage.
- * - index.html restores it very early.
- * - If we force-redirect unconditionally, we break that restore and the SPA may render blank.
+ * - 404.html stores the original deep-link into sessionStorage.
+ * - index.html restores it early.
+ * - If we force-redirect unconditionally, we break deep-link restore and may render blank.
  *
- * IMPORTANT:
- * - We do NOT use location.replace() here to avoid triggering another full navigation.
- * - We just rewrite the URL and let route() render the correct view.
+ * Implementation detail:
+ * - Use history.replaceState() (soft redirect) to avoid full reload and race conditions.
  */
 function safeRewriteRootToSteamAwards() {
   const pendingRestore = sessionStorage.getItem("awardhub:redirect");
-  if (pendingRestore) return; // Let index.html restore deep-link first.
+  if (pendingRestore) return;
 
   const path = (location.pathname || "").replace(/\/+$/, "");
   const isRoot = path === "" || path === "/" || path === "/index.html";
@@ -77,21 +81,21 @@ function safeRewriteRootToSteamAwards() {
 
 /**
  * Google Sheet JSON API endpoint (Apps Script Web App).
- * It returns:
+ * Returns:
  * {
  *   ok: true,
  *   sheet: "...",
  *   rows: N,
- *   data: [{Year, Title, Winner, ...}, ...]
+ *   data: [{Year, Title, Merit, ...}, ...]  // or {Year, Title, Winner, ...} for old sheet
  * }
  */
 const SHEET_API_URL =
   "https://script.google.com/macros/s/AKfycbwqm5cQV5jB7QHkAgRAySN4ie9Q1ugEuH8EwwygkDsHaZn21vqMrsiRXk-GJrH5ElRN/exec?sheet=steam_awards_all";
 
 /**
- * Simple in-memory cache:
- * - Avoid repeated network calls when navigating between years.
- * - Cache resets only on page reload.
+ * In-memory cache for sheet rows.
+ * - Prevents repeated network calls during navigation.
+ * - Reset only on page reload.
  */
 let _sheetCache = null;
 
@@ -101,7 +105,6 @@ let _sheetCache = null;
 
 /**
  * Escape string for safe HTML insertion (prevents HTML injection).
- * Must be used for ANY external content (sheet rows, etc).
  */
 function escapeHtml(s) {
   return String(s)
@@ -115,15 +118,13 @@ function escapeHtml(s) {
 /**
  * Convert a game name into a filename-friendly slug that matches your repo files.
  *
- * Your repo naming rules (based on your actual /img/<year>/ filenames):
+ * Based on your existing /img/<year>/ naming:
  * - lowercase
- * - tokens separated by underscore "_"
- * - "'s" becomes "_s" (IMPORTANT)
- *   Example: "Assassin's Creed" -> "assassin_s_creed"
- * - remove trademark symbols: ® ™ ©
+ * - tokens separated by "_"
+ * - "'s" becomes "_s"
+ * - remove ® ™ ©
  * - "&" becomes "and"
- * - collapse repeated underscores
- * - trim underscores
+ * - collapse underscores
  */
 function slugifyGameName(name) {
   if (!name) return "";
@@ -131,31 +132,19 @@ function slugifyGameName(name) {
   return String(name)
     .toLowerCase()
     .trim()
-
-    // Normalize common symbols
     .replace(/&/g, " and ")
     .replace(/[®™©]/g, "_")
-
-    // Keep a separator for "'s"
     .replace(/'s\b/g, "_s")
-
-    // Remaining apostrophes also become separators
     .replace(/'/g, "_")
-
-    // Replace any non-alphanumeric with underscore
     .replace(/[^a-z0-9]+/g, "_")
-
-    // Collapse multiple underscores
     .replace(/_+/g, "_")
-
-    // Trim underscores
     .replace(/^_+|_+$/g, "");
 }
 
 /**
- * Build an icon URL from year + game name (WebP first).
- * Example:
- *   /img/2018/assassin_s_creed_odyssey.webp
+ * Build icon URL from year + game name.
+ * Primary format is WebP:
+ *   /img/<year>/<slug>.webp
  */
 function buildGameImageUrl(year, gameName) {
   const slug = slugifyGameName(gameName);
@@ -165,9 +154,9 @@ function buildGameImageUrl(year, gameName) {
 
 /**
  * Normalize a path:
- * - Ensure it starts with "/"
+ * - Ensure leading "/"
  * - Remove trailing slashes
- * - Return "/" for empty values
+ * - Return "/" for empty
  */
 function normalizePath(p) {
   if (!p) return "/";
@@ -179,7 +168,7 @@ function normalizePath(p) {
 /**
  * Parse current URL pathname into route parts.
  * Example:
- *   "/steamawards/2024/" => ["steamawards","2024"]
+ *   "/steamawards/2024/" => ["steamawards", "2024"]
  */
 function parsePathRoute() {
   const path = normalizePath(location.pathname);
@@ -187,14 +176,14 @@ function parsePathRoute() {
 }
 
 /**
- * Loading state.
+ * Render loading state.
  */
 function setLoading() {
   getAppEl().innerHTML = `<div class="notice">Loading…</div>`;
 }
 
 /**
- * Error state.
+ * Render error state.
  */
 function setError(msg) {
   getAppEl().innerHTML = `<div class="notice">❌ ${escapeHtml(msg)}</div>`;
@@ -237,13 +226,21 @@ function getAvailableYearsFromRows(rows) {
 
 /**
  * Convert flat sheet rows into the UI structure for a single year.
+ *
+ * IMPORTANT for your column rename:
+ * - Old sheet: { Winner }
+ * - New sheet: { Merit }
+ * We read:
+ *   meritOrWinner = r.Merit ?? r.Winner ?? ""
  */
 function buildYearDataFromRows(year, rows) {
   const awards = rows
     .filter((r) => Number(r.Year) === Number(year))
     .map((r, idx) => {
       const awardName = String(r.Title || "").trim() || `Award ${idx + 1}`;
-      const winnerName = String(r.Winner || "").trim() || "Unknown Game";
+
+      // Prefer the new column "Merit", fallback to legacy "Winner".
+      const meritOrWinner = String((r.Merit ?? r.Winner ?? "")).trim() || "Unknown Game";
 
       return {
         award_id: awardName
@@ -253,9 +250,11 @@ function buildYearDataFromRows(year, rows) {
 
         award_name: awardName,
 
+        // Keep the internal field name "winner" to avoid refactoring all UI code.
+        // Semantically, it now represents the "Merit" value when your sheet uses Merit.
         winner: {
-          game_name: winnerName,
-          icon_url: buildGameImageUrl(year, winnerName),
+          game_name: meritOrWinner,
+          icon_url: buildGameImageUrl(year, meritOrWinner),
 
           // Reserved: external links
           blogger_url: "",
@@ -296,7 +295,7 @@ async function fetchYearData(year) {
  * - try .webp
  * - then .jpg
  * - then .png
- * - finally placeholder
+ * - then placeholder
  */
 function imgWithFallback(url, className = "gameCard__img") {
   const safe = escapeHtml(url || "/img/placeholder.png");
@@ -328,21 +327,12 @@ function imgWithFallback(url, className = "gameCard__img") {
    Navigation (History API)
    ============================================================================ */
 
-/**
- * SPA navigation:
- * - Push state and render immediately.
- */
 function navigate(to) {
   const url = normalizePath(to) + "/";
   history.pushState({}, "", url);
   route();
 }
 
-/**
- * SPA replace:
- * - Replace state and render.
- * - Useful for redirects that should not pollute history.
- */
 function replace(to) {
   const url = normalizePath(to) + "/";
   history.replaceState({}, "", url);
@@ -376,7 +366,7 @@ async function renderHome() {
       <div class="hero">
         <h1 class="hero__title">AwardHub</h1>
         <p class="hero__desc">
-          Steam Awards data is loaded live from Google Sheet. Click a year to view winners.
+          Steam Awards data is loaded live from Google Sheet. Click a year to view results.
         </p>
 
         <div class="grid grid--years">
@@ -389,9 +379,6 @@ async function renderHome() {
   }
 }
 
-/**
- * Year page header.
- */
 function renderYearHeader(year, awardCount, source) {
   return `
     <div class="hero">
@@ -401,7 +388,7 @@ function renderYearHeader(year, awardCount, source) {
       </p>
 
       <div class="toolbar">
-        <input id="searchBox" class="input" placeholder="Search by award / winner (live filter)" />
+        <input id="searchBox" class="input" placeholder="Search by award / merit (live filter)" />
         <span class="badge">Year: ${year}</span>
         <a class="badge" href="/steamawards/">Back</a>
       </div>
@@ -411,20 +398,20 @@ function renderYearHeader(year, awardCount, source) {
 
 /**
  * Placeholder overview text.
+ * Note:
+ * - Internally we still store the text under winner.game_name for compatibility.
+ * - If your sheet uses Merit, this is effectively the Merit value.
  */
 function buildAwardOverviewText(award) {
   const awardName = String(award?.award_name || "").trim();
-  const winnerName = String(award?.winner?.game_name || "").trim();
+  const meritName = String(award?.winner?.game_name || "").trim();
 
   return `
-${awardName ? `“${awardName}”` : "This award"} is showcased here with the winner and quick links.
-Winner: ${winnerName || "Unknown"}.
+${awardName ? `“${awardName}”` : "This award"} is showcased here with the highlighted game and quick links.
+Merit: ${meritName || "Unknown"}.
 `;
 }
 
-/**
- * Two external link buttons (reserved).
- */
 function renderExternalButtons(winner) {
   const postUrl = winner?.blogger_url || "";
   const steamUrl = winner?.steam_url || "";
@@ -435,17 +422,14 @@ function renderExternalButtons(winner) {
 
   const steamBtn = steamUrl
     ? `<a class="btn" href="${escapeHtml(steamUrl)}" target="_blank" rel="noopener">View on Steam</a>`
-    : `<span class="btn btn--disabled" title="steam_url is missing">Buy</span>`;
+    : `<span class="btn btn--disabled" title="steam_url is missing">Steam</span>`;
 
   return `<div class="btnRow btnRow--tight">${postBtn}${steamBtn}</div>`;
 }
 
-/**
- * Featured panel.
- */
 function renderFeaturedAward(award, year) {
   const awardName = escapeHtml(award?.award_name || "Unknown Award");
-  const winnerName = escapeHtml(award?.winner?.game_name || "Unknown Game");
+  const meritName = escapeHtml(award?.winner?.game_name || "Unknown Game");
   const icon = award?.winner?.icon_url || "/img/placeholder.png";
   const overview = escapeHtml(buildAwardOverviewText(award)).replaceAll("\n", "<br/>");
 
@@ -457,8 +441,8 @@ function renderFeaturedAward(award, year) {
         <div class="featured__media">
           ${imgWithFallback(icon, "featured__img")}
           <div class="featured__winnerBlock">
-            <div class="featured__label">Winner</div>
-            <div class="featured__winnerName">${winnerName}</div>
+            <div class="featured__label">Merit</div>
+            <div class="featured__winnerName">${meritName}</div>
           </div>
         </div>
 
@@ -470,22 +454,19 @@ function renderFeaturedAward(award, year) {
         <div class="featured__rightText">${overview}</div>
 
         <div class="featured__hint">
-          Tip: Click a card below to switch awards. Search filters by award name / winner.
+          Tip: Click a card below to switch awards. Search filters by award name / merit.
         </div>
       </aside>
     </section>
   `;
 }
 
-/**
- * Carousel items.
- */
 function renderAwardCarousel(awards, selectedIndex) {
   const items = awards
     .map((a, idx) => {
       const isActive = idx === selectedIndex;
       const awardName = escapeHtml(a.award_name || "Award");
-      const winnerName = escapeHtml(a?.winner?.game_name || "Unknown");
+      const meritName = escapeHtml(a?.winner?.game_name || "Unknown");
       const icon = a?.winner?.icon_url || "/img/placeholder.png";
       const key = escapeHtml(a.award_id || String(idx));
 
@@ -500,7 +481,7 @@ function renderAwardCarousel(awards, selectedIndex) {
           </div>
           <div class="awardChip__text">
             <div class="awardChip__award">${awardName}</div>
-            <div class="awardChip__winner">${winnerName}</div>
+            <div class="awardChip__winner">${meritName}</div>
           </div>
         </button>
       `;
@@ -517,12 +498,6 @@ function renderAwardCarousel(awards, selectedIndex) {
   `;
 }
 
-/**
- * Live filter awards.
- * Returns:
- * - filteredAwards
- * - indexMap: filteredIndex -> originalIndex
- */
 function filterAwards(allAwards, keyword) {
   const k = keyword.trim().toLowerCase();
   if (!k) return { filteredAwards: allAwards, indexMap: allAwards.map((_, i) => i) };
@@ -531,8 +506,8 @@ function filterAwards(allAwards, keyword) {
   const map = [];
   allAwards.forEach((a, i) => {
     const award = String(a?.award_name || "").toLowerCase();
-    const winner = String(a?.winner?.game_name || "").toLowerCase();
-    if (award.includes(k) || winner.includes(k)) {
+    const merit = String(a?.winner?.game_name || "").toLowerCase();
+    if (award.includes(k) || merit.includes(k)) {
       filtered.push(a);
       map.push(i);
     }
@@ -542,17 +517,9 @@ function filterAwards(allAwards, keyword) {
 }
 
 /* ============================================================================
-   Carousel scroll behavior control (fix long replay animation)
+   Carousel scroll behavior control
    ============================================================================ */
 
-/**
- * Temporarily force scroll-behavior to avoid CSS overriding JS.
- *
- * Why:
- * - If you set `.carousel__track { scroll-behavior: smooth; }` in CSS,
- *   browsers may still animate long scroll even when JS uses behavior:"auto".
- * - We hard override with inline style during "jump" operations.
- */
 function withTempScrollBehavior(track, behavior, fn) {
   if (!track) return;
   const prev = track.style.scrollBehavior;
@@ -564,11 +531,6 @@ function withTempScrollBehavior(track, behavior, fn) {
   }
 }
 
-/**
- * Smart horizontal scrolling:
- * - For near distance: smooth
- * - For far distance: jump (auto), no replay-like long animation
- */
 function scrollChipIntoViewSmart(track, chip) {
   if (!track || !chip) return;
 
@@ -581,12 +543,10 @@ function scrollChipIntoViewSmart(track, chip) {
   const FAR_THRESHOLD = track.clientWidth * 0.9;
 
   if (distance > FAR_THRESHOLD) {
-    // Hard jump: must be truly instant.
     withTempScrollBehavior(track, "auto", () => {
       track.scrollTo({ left: clampedLeft, behavior: "auto" });
     });
   } else {
-    // Micro movement: allow smooth.
     withTempScrollBehavior(track, "smooth", () => {
       track.scrollTo({ left: clampedLeft, behavior: "smooth" });
     });
@@ -610,7 +570,6 @@ async function renderYearPage(year) {
       return;
     }
 
-    // Local state (kept inside this renderYearPage closure)
     let selectedOriginalIndex = 0;
     let carouselScrollLeft = 0;
     let filteredAwards = allAwards;
@@ -633,7 +592,6 @@ async function renderYearPage(year) {
         </div>
       `;
 
-      // Search input wiring
       const searchBox = document.getElementById("searchBox");
       if (searchBox) {
         searchBox.value = lastKeyword;
@@ -652,7 +610,6 @@ async function renderYearPage(year) {
             selectedOriginalIndex = indexMap[0];
           }
 
-          // Preserve current scroll before rerender (if track exists)
           const oldTrack = document.getElementById("awardCarousel");
           if (oldTrack) carouselScrollLeft = oldTrack.scrollLeft;
 
@@ -663,17 +620,14 @@ async function renderYearPage(year) {
         });
       }
 
-      // Carousel wiring
       const track = document.getElementById("awardCarousel");
       if (track) {
-        // Restore scroll position after DOM is ready
         requestAnimationFrame(() => {
           withTempScrollBehavior(track, "auto", () => {
             track.scrollLeft = carouselScrollLeft;
           });
         });
 
-        // Update scroll cache when user drags the scrollbar thumb
         track.addEventListener(
           "scroll",
           () => {
@@ -682,7 +636,6 @@ async function renderYearPage(year) {
           { passive: true }
         );
 
-        // Click chip to switch award
         track.addEventListener("click", (e) => {
           const btn = e.target.closest(".awardChip");
           if (!btn) return;
@@ -693,18 +646,15 @@ async function renderYearPage(year) {
           const originalIdx = indexMap[filteredIdx];
           if (!Number.isFinite(originalIdx)) return;
 
-          // Save scroll before rerender
           carouselScrollLeft = track.scrollLeft;
           selectedOriginalIndex = originalIdx;
 
           render();
 
-          // After rerender, scroll the active chip into view without long animation
           requestAnimationFrame(() => {
             const newTrack = document.getElementById("awardCarousel");
             if (!newTrack) return;
 
-            // Restore previous scroll first (no animation)
             withTempScrollBehavior(newTrack, "auto", () => {
               newTrack.scrollLeft = carouselScrollLeft;
             });
@@ -713,8 +663,6 @@ async function renderYearPage(year) {
             if (!active) return;
 
             scrollChipIntoViewSmart(newTrack, active);
-
-            // Update cache after move
             carouselScrollLeft = newTrack.scrollLeft;
           });
         });
@@ -731,20 +679,14 @@ async function renderYearPage(year) {
    Router
    ============================================================================ */
 
-/**
- * Router entry:
- * - First, apply safe root rewrite to /steamawards/ (no reload, no deep-link break).
- * - Then parse path and render.
- */
 async function route() {
   syncYearNow();
 
-  // IMPORTANT: do this before parsing parts.
+  // Must happen BEFORE parsing route parts.
   safeRewriteRootToSteamAwards();
 
   const parts = parsePathRoute();
 
-  // If still root for any reason, force replace to steamawards and render home.
   if (parts.length === 0) {
     replace("/steamawards");
     await renderHome();
@@ -767,7 +709,6 @@ async function route() {
     return;
   }
 
-  // Unknown route
   getAppEl().innerHTML = `
     <div class="hero">
       <h1 class="hero__title">404</h1>
@@ -783,11 +724,6 @@ async function route() {
    Link interception (internal SPA navigation)
    ============================================================================ */
 
-/**
- * Intercept internal links:
- * - Only absolute internal paths starting with "/"
- * - Do NOT intercept external links, mailto, tel, hash anchors
- */
 document.addEventListener("click", (e) => {
   const a = e.target.closest("a");
   if (!a) return;
@@ -805,9 +741,4 @@ document.addEventListener("click", (e) => {
 });
 
 window.addEventListener("popstate", route);
-
-/**
- * DOMContentLoaded is enough because index.html loads app.js with defer.
- * This guarantees #app exists before route() runs.
- */
 window.addEventListener("DOMContentLoaded", route);
