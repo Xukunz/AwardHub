@@ -242,11 +242,8 @@ function buildYearDataFromRows(year, rows) {
   const awards = rows
     .filter((r) => Number(r.Year) === Number(year))
     .map((r, idx) => {
-   const awardName = String(r.Title || "").trim() || `Award ${idx + 1}`;
-
-// Prefer the new column name: Merit. Fallback to old column name: Winner.
-const meritName = String((r.Merit ?? r.Winner ?? "")).trim() || "Unknown Game";
-
+      const awardName = String(r.Title || "").trim() || `Award ${idx + 1}`;
+      const winnerName = String(r.Winner || "").trim() || "Unknown Game";
 
       return {
         award_id: awardName
