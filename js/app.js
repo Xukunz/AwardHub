@@ -278,7 +278,7 @@ function buildYearDataFromRows(year, rows) {
 
   return {
     year,
-    source: "Steam Awards (Google Sheet)",
+    source: "Steam Awards Official Announcement Page",
     awards: deduped
   };
 }
@@ -376,7 +376,7 @@ async function renderHome() {
       <div class="hero">
         <h1 class="hero__title">AwardHub</h1>
         <p class="hero__desc">
-          Steam Awards data is loaded live from Google Sheet. Click a year to view winners.
+          Explore official Steam Awards winners by year. Data is continuously updated for accuracy.
         </p>
 
         <div class="grid grid--years">
