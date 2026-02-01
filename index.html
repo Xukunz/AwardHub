@@ -2,36 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-
-  <!-- =========================================================
-       GitHub Pages SPA deep-link restore (HASH fallback)
-       ---------------------------------------------------------
-       When a user directly opens:
-         /steamawards/2018/
-       GitHub Pages serves 404.html first.
-       404.html redirects to:
-         /#/steamawards/2018/
-       This script converts it back to:
-         /steamawards/2018/
-       BEFORE app.js runs.
-       ========================================================= -->
-  <script>
-    (function () {
-      if (location.hash && location.hash.startsWith("#/")) {
-        var restoredPath = location.hash.slice(1); // remove leading "#"
-        history.replaceState(null, "", restoredPath);
-      }
-    })();
-  </script>
-
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
   <title>AwardHub - Steam Game Awards</title>
   <meta name="description"
         content="AwardHub showcases Steam Game Awards by year, including winners with game icons and external links." />
 
-  <!-- Always use absolute paths on GitHub Pages -->
+  <!-- Cloudflare Web Analytics -->
+  <script
+    defer
+    src='https://static.cloudflareinsights.com/beacon.min.js'
+    data-cf-beacon='{"token": "25e73b312a0849f98038f38556389a1b"}'
+  ></script>
+  <!-- End Cloudflare Web Analytics -->
+
+ <!-- Site assets -->
   <link rel="icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/css/style.css" />
+  <link rel="canonical" href="https://games.awardhub.net/steamawards/" /> -->
 </head>
 
 <body>
