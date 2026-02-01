@@ -152,6 +152,23 @@ function slugifyGameName(name) {
     .replace(/^_+|_+$/g, "");
 }
 
+function buildAmazonSearchUrl(gameName) {
+  if (!gameName) return "";
+
+  const keyword = encodeURIComponent(
+    String(gameName).trim()
+  );
+
+  return `https://www.amazon.com/s?tag=ahgames-20&k=${keyword}`;
+}
+
+//Temp Blog URL
+const BLOG_BASE_URL = "https://blog.awardhub.net/";
+
+function buildBlogUrl(gameName, year) {
+  return BLOG_BASE_URL;
+}
+
 /**
  * Build an icon URL from year + game name (WebP first).
  * Example:
@@ -257,10 +274,16 @@ function buildYearDataFromRows(year, rows) {
           game_name: winnerName,
           icon_url: buildGameImageUrl(year, winnerName),
 
-          // Reserved: external links
-          blogger_url: "",
+          // Blog post (AwardHub article)
+          blogger_url: buildBlogUrl(winnerName, year),
+
+          // Amazon affiliate search page
+          amazon_url: buildAmazonSearchUrl(winnerName),
+
+          // Optional: Steam store page (info only)
           steam_url: ""
         },
+
 
         nominees: []
       };
@@ -278,7 +301,7 @@ function buildYearDataFromRows(year, rows) {
 
   return {
     year,
-    source: "Steam Awards (Google Sheet)",
+    source: "Steam Awards Official Announcement Page",
     awards: deduped
   };
 }
@@ -376,7 +399,7 @@ async function renderHome() {
       <div class="hero">
         <h1 class="hero__title">AwardHub</h1>
         <p class="hero__desc">
-          Steam Awards data is loaded live from Google Sheet. Click a year to view winners.
+          Explore official Steam Awards winners by year. Data is continuously updated for accuracy.
         </p>
 
         <div class="grid grid--years">
@@ -427,18 +450,49 @@ Winner: ${winnerName || "Unknown"}.
  */
 function renderExternalButtons(winner) {
   const postUrl = winner?.blogger_url || "";
+  const amazonUrl = winner?.amazon_url || "";
   const steamUrl = winner?.steam_url || "";
 
   const postBtn = postUrl
-    ? `<a class="btn btn--primary" href="${escapeHtml(postUrl)}" target="_blank" rel="noopener">Read Post</a>`
-    : `<span class="btn btn--primary btn--disabled" title="blogger_url is missing">Post</span>`;
+    ? `<a class="btn btn--primary"
+         href="${escapeHtml(postUrl)}"
+         target="_blank"
+         rel="noopener">
+         Read Post
+       </a>`
+    : `<span class="btn btn--primary btn--disabled"
+             title="Post not available">
+         Read Post
+       </span>`;
+
+  const buyBtn = amazonUrl
+    ? `<a class="btn btn--accent"
+         href="${escapeHtml(amazonUrl)}"
+         target="_blank"
+         rel="noopener">
+         Buy on Amazon
+       </a>`
+    : `<span class="btn btn--accent btn--disabled"
+             title="Amazon link not available">
+         Buy
+       </span>`;
 
   const steamBtn = steamUrl
-    ? `<a class="btn" href="${escapeHtml(steamUrl)}" target="_blank" rel="noopener">View on Steam</a>`
-    : `<span class="btn btn--disabled" title="steam_url is missing">Buy</span>`;
+    ? `<a class="btn"
+         href="${escapeHtml(steamUrl)}"
+         target="_blank"
+         rel="noopener">
+         View on Steam
+       </a>`
+    : "";
 
-  return `<div class="btnRow btnRow--tight">${postBtn}${steamBtn}</div>`;
+  return `<div class="btnRow btnRow--tight">
+            ${postBtn}
+            ${buyBtn}
+            ${steamBtn}
+          </div>`;
 }
+
 
 /**
  * Featured panel.
