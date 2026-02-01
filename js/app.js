@@ -162,6 +162,13 @@ function buildAmazonSearchUrl(gameName) {
   return `https://www.amazon.com/s?tag=ahgames-20&k=${keyword}`;
 }
 
+//Temp Blog URL
+const BLOG_BASE_URL = "https://blog.awardhub.net/";
+
+function buildBlogUrl(gameName, year) {
+  return BLOG_BASE_URL;
+}
+
 /**
  * Build an icon URL from year + game name (WebP first).
  * Example:
@@ -268,7 +275,7 @@ function buildYearDataFromRows(year, rows) {
           icon_url: buildGameImageUrl(year, winnerName),
 
           // Blog post (AwardHub article)
-          blogger_url: "",
+          blogger_url: buildBlogUrl(winnerName, year),
 
           // Amazon affiliate search page
           amazon_url: buildAmazonSearchUrl(winnerName),
